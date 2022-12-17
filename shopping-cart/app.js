@@ -60,7 +60,7 @@ class View {
                 Storage.saveCart(cart)
 
                 this.setCartValues(cart)
-                this.addCartItem(cart)
+                this.populate(cart)
             })
         })
     }
@@ -68,7 +68,7 @@ class View {
     setCartValues(cart) {
         let totalPrice = 0
         let totalItems = 0
-        console.log(cart)
+
         cart.map((item) => {
             totalPrice = totalPrice + item.price * item.amount
             totalItems = totalItems + item.amount
@@ -206,7 +206,6 @@ class Storage {
 
     static getProduct(id) {
         let products = JSON.parse(localStorage.getItem('products'))
-
         return products.find((item) => item.id === id)
     }
 
