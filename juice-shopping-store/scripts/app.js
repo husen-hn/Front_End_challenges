@@ -1,25 +1,23 @@
-const cartBtn = document.querySelector('.cart-btn')
-const deleteBtn = document.querySelector('.overlay-cart__delete')
-const checkoutBtn = document.querySelector('.overlay-cart__button')
+import Cart from './cart.js'
+import Product from './product.js'
+import View from './view.js'
 
-overlayCartOff()
+const searchInput = document.querySelector('.site-header__search')
 
-cartBtn.addEventListener('click', () => {
-    overlayCartOn()
+window.addEventListener('DOMContentLoaded', () => {
+    const cart = new Cart()
+    const product = new Product()
+    const view = new View()
+
+    // initial process to display/hide ... of cart
+    cart.cartInitProcess()
+
+    product.getProducts().then((data) => {
+        view.displayJuices(data)
+
+        searchInput.addEventListener('input', (e) => {
+            let searchedProducts = product.searchProduct(data, e.target.value)
+            view.displayJuices(searchedProducts)
+        })
+    })
 })
-
-deleteBtn.addEventListener('click', () => {
-    overlayCartOff()
-})
-
-checkoutBtn.addEventListener('click', () => {
-    overlayCartOff()
-})
-
-function overlayCartOn() {
-    document.getElementsByClassName('overlay-cart')[0].style.display = 'block'
-}
-
-function overlayCartOff() {
-    document.getElementsByClassName('overlay-cart')[0].style.display = 'none'
-}

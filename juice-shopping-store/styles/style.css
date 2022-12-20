@@ -43,7 +43,7 @@ a:hover {
 }
 
 .products {
-    padding: 4em;
+    padding: 8em;
     display: grid;
     grid-template-columns: auto auto auto auto;
 }
@@ -52,6 +52,7 @@ a:hover {
 	width: 80%;
 	height: 90%;
     padding: 1em;
+    margin: 1em;
 	background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0px 10px 20px pink;
