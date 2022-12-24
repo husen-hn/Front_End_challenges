@@ -6,6 +6,7 @@ export default class Product {
             const data = await res.json()
 
             let juices = data.items
+
             juices = juices.map((item) => {
                 const { title, price, volume } = item.fields
                 const { id } = item.sys
