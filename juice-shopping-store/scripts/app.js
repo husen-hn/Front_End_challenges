@@ -14,18 +14,28 @@ window.addEventListener('DOMContentLoaded', () => {
     // initial process to display/hide ... of cart
     cart.cartInitProcess()
     // Add cart items amount
-    let cartAmount = storage.getCartAmount()
+    let cartAmount = product.getCartAmount()
     view.setCartAmount(cartAmount)
 
-    product.getProducts().then((data) => {
-        view.displayJuices(data)
-        view.setClickListenerAddToCartBtn(data, [
-            ...document.querySelectorAll('.addToCart')
-        ])
+    product
+        .getProducts()
+        .then((data) => {
+            view.displayJuices(data)
+            view.setClickListenerAddToCartBtn(data, [
+                ...document.querySelectorAll('.addToCart')
+            ])
 
-        searchInput.addEventListener('input', (e) => {
-            let searchedProducts = product.searchProduct(data, e.target.value)
-            view.displayJuices(searchedProducts)
+            searchInput.addEventListener('input', (e) => {
+                let searchedProducts = product.searchProduct(
+                    data,
+                    e.target.value
+                )
+                view.displayJuices(searchedProducts)
+            })
         })
-    })
+        .then(() => {
+            // Prepare cart items to display
+            const cartJuices = storage.getCartItems()
+            view.prepareCartJuices(cartJuices)
+        })
 })
