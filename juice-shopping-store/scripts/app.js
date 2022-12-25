@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // initial process to display/hide ... of cart
     cart.cartInitProcess()
+
     // Add cart items amount
     let cartAmount = product.getCartAmount()
     view.setCartAmount(cartAmount)

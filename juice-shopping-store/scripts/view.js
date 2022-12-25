@@ -1,11 +1,13 @@
 import Storage from './storage.js'
 import Product from './product.js'
+import Cart from './cart.js'
 
 export default class View {
     constructor() {
         this.juices = document.querySelector('.products')
         this.cartJuices = document.querySelector('.overlay-cart__cart-items')
         this.storage = new Storage()
+        this.cart = new Cart()
         this.cartItemsAmount = document.querySelector('.overlay-cart__items')
         this.cartTotalPrice = document.querySelector(
             '.overlay-cart__total-amount'
@@ -37,6 +39,11 @@ export default class View {
     }
 
     prepareCartJuices(juices) {
+        // Hide Cart if juices array is empty
+        if (juices.length == 0) {
+            this.cart.overlayCartOff()
+        }
+
         let cartJuicesHTML = ''
         juices.map((juice) => {
             cartJuicesHTML += `
@@ -56,7 +63,7 @@ export default class View {
                     </div>
                     <div class="overlay-cart__prices">
                     <div class="overlay-cart__amount">${juice.price}</div>
-                    <div class="overlay-cart__remove"><u>Remove</u></div>
+                    <div class="overlay-cart__remove" data-id=${juice.id}><u>Remove</u></div>
                 </div>
             </div>
             `
@@ -71,7 +78,13 @@ export default class View {
         this.setClickListenerToCartJuicesMinus(juices, [
             ...document.querySelectorAll('.overlay-cart__btn-minus')
         ])
+        this.setClickListenerToCartJuicesRemove(juices, [
+            ...document.querySelectorAll('.overlay-cart__remove')
+        ])
 
+        this.setClickListenerToJuicesRemoveAll(
+            document.querySelector('.overlay-cart__remove-all')
+        )
         // Set Cart Botton informations
         // Set cart total amount
         this.setCartTotalAmount()
@@ -79,8 +92,8 @@ export default class View {
         this.setCartTotalPrice()
     }
 
-    setClickListenerAddToCartBtn(juices, btnElement) {
-        btnElement.forEach((item) => {
+    setClickListenerAddToCartBtn(juices, btnElements) {
+        btnElements.forEach((item) => {
             let id = item.dataset.id
             let juice = juices.find((item) => item.id == id)
             item.addEventListener('click', () => {
@@ -93,12 +106,15 @@ export default class View {
                 // Update cart items
                 const cartJuices = this.storage.getCartItems()
                 this.prepareCartJuices(cartJuices)
+
+                // Prepare Cart again to disable cant openned until item == 0
+                this.cart.cartInitProcess()
             })
         })
     }
 
-    setClickListenerToCartJuicesPlus(juices, btnElement) {
-        btnElement.forEach((item) => {
+    setClickListenerToCartJuicesPlus(juices, btnElements) {
+        btnElements.forEach((item) => {
             const id = item.dataset.id
             const index = juices.findIndex((item) => item.id === id)
             const juice = juices[index]
@@ -125,8 +141,8 @@ export default class View {
         })
     }
 
-    setClickListenerToCartJuicesMinus(juices, btnElement) {
-        btnElement.forEach((item) => {
+    setClickListenerToCartJuicesMinus(juices, btnElements) {
+        btnElements.forEach((item) => {
             const id = item.dataset.id
             const index = juices.findIndex((item) => item.id === id)
             const juice = juices[index]
@@ -141,6 +157,46 @@ export default class View {
                     amount: juice.amount - 1
                 })
 
+                // Remove if amount of item increase to < 1
+                if (juice.amount - 1 < 1) {
+                    juices.splice(index, 1)
+                    if (juices === []) this.cart.cartInitProcess()
+                }
+
+                this.storage.setCartNewJuices(juices)
+
+                // Prepare new cart items to display
+                const cartJuices = this.storage.getCartItems()
+                this.prepareCartJuices(cartJuices)
+                // Add cart items amount on home page
+                const cartAmount = this.product.getCartAmount()
+                this.setCartAmount(cartAmount)
+            })
+        })
+    }
+
+    setClickListenerToJuicesRemoveAll(btnElement) {
+        btnElement.addEventListener('click', () => {
+            this.storage.clearJuicesCart()
+
+            // Prepare new cart items to display
+            const cartJuices = this.storage.getCartItems()
+            this.prepareCartJuices(cartJuices)
+            // Add cart items amount on home page
+            const cartAmount = this.product.getCartAmount()
+            this.setCartAmount(cartAmount)
+
+            this.cart.cartInitProcess()
+        })
+    }
+
+    setClickListenerToCartJuicesRemove(juices, btnElement) {
+        btnElement.forEach((item) => {
+            const id = item.dataset.id
+            const index = juices.findIndex((item) => item.id === id)
+
+            item.addEventListener('click', () => {
+                juices.splice(index, 1)
                 this.storage.setCartNewJuices(juices)
 
                 // Prepare new cart items to display

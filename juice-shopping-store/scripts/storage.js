@@ -17,4 +17,8 @@ export default class Storage {
         localStorage.removeItem('cart_juices')
         localStorage.setItem('cart_juices', JSON.stringify(juices))
     }
+
+    clearJuicesCart() {
+        localStorage.removeItem('cart_juices')
+    }
 }
