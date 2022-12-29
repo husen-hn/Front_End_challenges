@@ -1,21 +1,19 @@
-import Storage from './storage.js'
-import Product from './product.js'
-import Cart from './cart.js'
-
 export default class View {
     constructor() {
         this.juices = document.querySelector('.products')
         this.cartJuices = document.querySelector('.overlay-cart__cart-items')
-        this.storage = new Storage()
-        this.cart = new Cart()
         this.cartItemsAmount = document.querySelector('.overlay-cart__items')
         this.cartTotalPrice = document.querySelector(
             '.overlay-cart__total-amount'
         )
-        this.product = new Product()
     }
 
-    displayJuices(juices) {
+    displayJuices(storage, juices) {
+        const cartItems = storage.getCartItems()
+        let cartItemsId = []
+        cartItems.map((item) => {
+            cartItemsId.push(item.id)
+        })
         let juicesHTML = ''
         juices.map((juice) => {
             juicesHTML += `
@@ -27,9 +25,31 @@ export default class View {
                     <h4 class="title">${juice.title}</h4>
                     <h5 class="subtitle">${juice.volume}ml</h5>
                     <div class="amount">${juice.price}</div>
-                    <div class="addToCart" data-id=${juice.id}>
-                        <button class="button">Add to Cart</button>
-                    </div>
+                    `
+
+            const indexOfCartJuice = cartItems.findIndex(
+                (item) => item.id === juice.id
+            )
+            if (indexOfCartJuice >= 0) {
+                juicesHTML += `
+                        <div class="view-in-cart__container">
+                            <div class="view-in-cart__container--subtitle">view in cart</div>
+                            <div class="overlay-cart__btn-plus" data-id=${cartItems[indexOfCartJuice].id}>+</div>
+                            <div class="view-in-cart__count">${cartItems[indexOfCartJuice].amount}</div>
+                            <div class="overlay-cart__btn-minus" data-id=${cartItems[indexOfCartJuice].id}>-</div>
+                        </div>
+                        `
+            } else {
+                juicesHTML += `
+                        <div class="addToCart" data-id=${juice.id}>
+                            <button class="button">
+                                Add to Cart
+                            </button>
+                        </div>
+                        `
+            }
+
+            juicesHTML += `
                 </div>
             </div>
             `
@@ -38,10 +58,10 @@ export default class View {
         this.juices.innerHTML = juicesHTML
     }
 
-    prepareCartJuices(juices) {
+    prepareCartJuices(cart, storage, product, juices) {
         // Hide Cart if juices array is empty
         if (juices.length == 0) {
-            this.cart.overlayCartOff()
+            cart.overlayCartOff()
         }
 
         let cartJuicesHTML = ''
@@ -72,48 +92,64 @@ export default class View {
         this.cartJuices.innerHTML = cartJuicesHTML
 
         // Set Cart
-        this.setClickListenerToCartJuicesPlus(juices, [
+        this.setClickListenerToCartJuicesPlus(product, storage, cart, juices, [
             ...document.querySelectorAll('.overlay-cart__btn-plus')
         ])
-        this.setClickListenerToCartJuicesMinus(juices, [
+        this.setClickListenerToCartJuicesMinus(product, cart, storage, juices, [
             ...document.querySelectorAll('.overlay-cart__btn-minus')
         ])
-        this.setClickListenerToCartJuicesRemove(juices, [
-            ...document.querySelectorAll('.overlay-cart__remove')
-        ])
+        this.setClickListenerToCartJuicesRemove(
+            cart,
+            storage,
+            product,
+            juices,
+            [...document.querySelectorAll('.overlay-cart__remove')]
+        )
 
         this.setClickListenerToJuicesRemoveAll(
+            storage,
+            cart,
+            product,
             document.querySelector('.overlay-cart__remove-all')
         )
         // Set Cart Botton informations
         // Set cart total amount
-        this.setCartTotalAmount()
+        this.setCartTotalAmount(storage, product)
         // Set cart total Price
-        this.setCartTotalPrice()
+        this.setCartTotalPrice(storage, product)
     }
 
-    setClickListenerAddToCartBtn(juices, btnElements) {
+    setClickListenerAddToCartBtn(storage, cart, product, juices, btnElements) {
         btnElements.forEach((item) => {
             let id = item.dataset.id
             let juice = juices.find((item) => item.id == id)
             item.addEventListener('click', () => {
-                this.storage.saveOnCart(juice)
+                storage.saveOnCart(juice)
 
                 // Reload cart items amount
-                let cartAmount = this.product.getCartAmount()
+                let cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
 
                 // Update cart items
-                const cartJuices = this.storage.getCartItems()
-                this.prepareCartJuices(cartJuices)
+                const cartJuices = storage.getCartItems()
+                this.prepareCartJuices(cart, storage, product, cartJuices)
 
                 // Prepare Cart again to disable cant openned until item == 0
-                this.cart.cartInitProcess()
+                cart.cartInitProcess(product, storage)
+
+                // Reaload Products list page
+                product.initProducts(product, this, cart, storage)
             })
         })
     }
 
-    setClickListenerToCartJuicesPlus(juices, btnElements) {
+    setClickListenerToCartJuicesPlus(
+        product,
+        storage,
+        cart,
+        juices,
+        btnElements
+    ) {
         btnElements.forEach((item) => {
             const id = item.dataset.id
             const index = juices.findIndex((item) => item.id === id)
@@ -129,19 +165,27 @@ export default class View {
                     amount: juice.amount + 1
                 })
 
-                this.storage.setCartNewJuices(juices)
+                storage.setCartNewJuices(juices)
 
                 // Prepare new cart items to display
-                const cartJuices = this.storage.getCartItems()
-                this.prepareCartJuices(cartJuices)
+                const cartJuices = storage.getCartItems()
+                this.prepareCartJuices(cart, storage, product, cartJuices)
                 // Add cart items amount on home page
-                const cartAmount = this.product.getCartAmount()
+                const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
+                // Reaload Products list page
+                product.initProducts(product, this, cart, storage)
             })
         })
     }
 
-    setClickListenerToCartJuicesMinus(juices, btnElements) {
+    setClickListenerToCartJuicesMinus(
+        product,
+        cart,
+        storage,
+        juices,
+        btnElements
+    ) {
         btnElements.forEach((item) => {
             const id = item.dataset.id
             const index = juices.findIndex((item) => item.id === id)
@@ -160,50 +204,58 @@ export default class View {
                 // Remove if amount of item increase to < 1
                 if (juice.amount - 1 < 1) {
                     juices.splice(index, 1)
-                    if (juices === []) this.cart.cartInitProcess()
+                    if (juices === []) cart.cartInitProcess(product, storage)
                 }
 
-                this.storage.setCartNewJuices(juices)
+                storage.setCartNewJuices(juices)
 
                 // Prepare new cart items to display
-                const cartJuices = this.storage.getCartItems()
-                this.prepareCartJuices(cartJuices)
+                const cartJuices = storage.getCartItems()
+                this.prepareCartJuices(cart, storage, product, cartJuices)
                 // Add cart items amount on home page
-                const cartAmount = this.product.getCartAmount()
+                const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
+                // Reaload Products list page
+                product.initProducts(product, this, cart, storage)
             })
         })
     }
 
-    setClickListenerToJuicesRemoveAll(btnElement) {
+    setClickListenerToJuicesRemoveAll(storage, cart, product, btnElement) {
         btnElement.addEventListener('click', () => {
-            this.storage.clearJuicesCart()
+            storage.clearJuicesCart()
 
             // Prepare new cart items to display
-            const cartJuices = this.storage.getCartItems()
-            this.prepareCartJuices(cartJuices)
+            const cartJuices = storage.getCartItems()
+            this.prepareCartJuices(cart, storage, product, cartJuices)
             // Add cart items amount on home page
-            const cartAmount = this.product.getCartAmount()
+            const cartAmount = product.getCartAmount(storage)
             this.setCartAmount(cartAmount)
 
-            this.cart.cartInitProcess()
+            cart.cartInitProcess(product, storage)
         })
     }
 
-    setClickListenerToCartJuicesRemove(juices, btnElement) {
+    setClickListenerToCartJuicesRemove(
+        cart,
+        storage,
+        product,
+        juices,
+        btnElement
+    ) {
         btnElement.forEach((item) => {
             const id = item.dataset.id
             const index = juices.findIndex((item) => item.id === id)
 
             item.addEventListener('click', () => {
                 juices.splice(index, 1)
-                this.storage.setCartNewJuices(juices)
+                storage.setCartNewJuices(juices)
 
                 // Prepare new cart items to display
-                const cartJuices = this.storage.getCartItems()
-                this.prepareCartJuices(cartJuices)
+                const cartJuices = storage.getCartItems()
+                this.prepareCartJuices(cart, storage, product, cartJuices)
                 // Add cart items amount on home page
-                const cartAmount = this.product.getCartAmount()
+                const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
             })
         })
@@ -214,13 +266,13 @@ export default class View {
         cartAmountElement.innerText = cartAmount
     }
 
-    setCartTotalAmount() {
-        let cartAmount = this.product.getCartAmount()
+    setCartTotalAmount(storage, product) {
+        let cartAmount = product.getCartAmount(storage)
         this.cartItemsAmount.innerText = cartAmount + ' items'
     }
 
-    setCartTotalPrice() {
-        let cartPrice = this.product.getCartTotalPrice()
+    setCartTotalPrice(storage, product) {
+        let cartPrice = product.getCartTotalPrice(storage)
         this.cartTotalPrice.innerText = '$ ' + cartPrice
     }
 }

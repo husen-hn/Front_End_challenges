@@ -1,8 +1,33 @@
-import Storage from './storage.js'
-
 export default class Product {
-    constructor() {
-        this.storage = new Storage()
+    initProducts(product, view, cart, storage) {
+        this.getProducts()
+            .then((data) => {
+                view.displayJuices(storage, data)
+                view.setClickListenerAddToCartBtn(
+                    storage,
+                    cart,
+                    product,
+                    data,
+                    [...document.querySelectorAll('.addToCart')]
+                )
+
+                document
+                    .querySelector('.site-header__search')
+                    .addEventListener('input', (e) => {
+                        let searchedJuices = this.searchJuice(
+                            data,
+                            e.target.value
+                        )
+                        this.view.displayJuices(displayJuices, searchedJuices)
+                    })
+            })
+            .then(() => {
+                // Prepare cart items to display
+                const cartJuices = storage.getCartItems()
+                view.prepareCartJuices(cart, storage, product, cartJuices)
+                // Display Cart on products "view in cart"
+                cart.openCartOnProductCartViews()
+            })
     }
 
     // get products from json
@@ -26,26 +51,26 @@ export default class Product {
         }
     }
 
-    searchProduct(products, keyword) {
-        return products.filter((item) => {
+    searchJuice(juices, keyword) {
+        return juices.filter((item) => {
             const title = item.title.toLowerCase()
             const key = keyword.trim().toLowerCase()
             return title.includes(key)
         })
     }
 
-    getCartAmount() {
+    getCartAmount(storage) {
         let amount = 0
-        this.storage.getCartItems().map((itme) => {
+        storage.getCartItems().map((itme) => {
             amount += itme.amount
         })
 
         return amount
     }
 
-    getCartTotalPrice() {
+    getCartTotalPrice(storage) {
         let totalPrice = 0
-        this.storage.getCartItems().map((itme) => {
+        storage.getCartItems().map((itme) => {
             totalPrice += itme.price
         })
 
