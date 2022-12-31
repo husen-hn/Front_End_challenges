@@ -1,12 +1,12 @@
+@font-face {
+  font-family: 'Vazir-FD';
+  src: url('font/Vazir-Regular-FD.woff');
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-@font-face {
-  font-family: 'Vazir-FD';
-  src: url('font/Vazir-Regular-FD.woff');
 }
 
 body {
@@ -50,4 +50,4 @@ body {
 
 #app p {
   color: #212121;
-}
+} 

@@ -1,49 +1,64 @@
-import HomePage from './pages/HomePage.js'
-import LastVideos from './pages/LastVideos.js'
-import LastPosts from './pages/LastPosts.js'
-
-const navTo = (url) => {
-  history.pushState(null, null, url)
-  router()
+function navTo(url) {
+    history.pushState(null, null, url)
+    router()
 }
 
-const router = () => {
-  const routes = [
-    { path: '/', view: HomePage },
-    { path: '/last-videos', view: LastVideos },
-    { path: '/last-posts', view: LastPosts },
-  ]
+function router() {
+    const routes = [
+        {
+            path: '/spa-project/',
+            view: () => console.log('/spa-project/')
+        },
+        {
+            path: '/spa-project/last-videos',
+            view: () => console.log('/spa-project/last-videos')
+        },
+        {
+            path: '/spa-project/last-posts',
+            view: () => console.log('/spa-project/last-posts')
+        }
+    ]
 
-  const matchRoutes = routes.map((item) => {
-    return {
-      route: item,
-      isMatch: location.pathname === item.path,
+    const matchRoutes = routes.map((item) => {
+        return {
+            route: item,
+            isMatch: location.pathname === item.path
+        }
+    })
+
+    let match = matchRoutes.find((item) => {
+        return item.isMatch
+    })
+
+    if (!match) {
+        match = {
+            route: routes[0],
+            match: true
+        }
     }
-  })
 
-  let match = matchRoutes.find((item) => {
-    return item.isMatch
-  })
-
-  if (!match) {
-    match = {
-      route: routes[0],
-      isMatch: true,
-    }
-  }
-
-  document.querySelector('#app').innerHTML = match.route.view()
+    console.log(match.route.view())
 }
 
-window.addEventListener('popstate', router)
+document.addEventListener('popstate', router)
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', (event) => {
-    if (event.target.matches('[data-link]')) {
-      event.preventDefault()
-      navTo(event.target.href)
-    }
-  })
+    document.body.addEventListener('click', (event) => {
+        if (event.target.matches('[data-link]')) {
+            event.preventDefault()
+            const url =
+                'http://' +
+                event.target.href.split('/')[
+                    event.target.href.split('/').length - 2
+                ] +
+                '/spa-project/' +
+                event.target.href.split('/')[
+                    event.target.href.split('/').length - 1
+                ]
 
-  router()
+            navTo(url)
+        }
+    })
+
+    router()
 })
