@@ -1,21 +1,25 @@
-import Cart from './cart.js'
-import Product from './product.js'
-import View from './view.js'
-import Storage from './storage.js'
+import Router from './router.js'
+const router = new Router()
 
-window.addEventListener('DOMContentLoaded', () => {
-    const cart = new Cart()
-    const product = new Product()
-    const view = new View()
-    const storage = new Storage()
+document.addEventListener('popstate', router.router)
 
-    // initial process to display/hide ... of cart
-    cart.cartInitProcess(product, storage)
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.addEventListener('click', (event) => {
+        if (event.target.matches('[data-link]')) {
+            event.preventDefault()
+            const url =
+                'http://' +
+                event.target.href.split('/')[
+                    event.target.href.split('/').length - 2
+                ] +
+                '/juice-shopping-store/' +
+                event.target.href.split('/')[
+                    event.target.href.split('/').length - 1
+                ]
 
-    // Add cart items amount
-    let cartAmount = product.getCartAmount(storage)
-    view.setCartAmount(cartAmount)
+            router.navTo(url)
+        }
+    })
 
-    // Display Juices list and preload process
-    product.initProducts(product, view, cart, storage)
+    router.router()
 })

@@ -1,5 +1,5 @@
 export default class Product {
-    initProducts(product, view, cart, storage) {
+    initProducts(product, view, cart, storage, router) {
         this.getProducts()
             .then((data) => {
                 view.displayJuices(storage, data)
@@ -18,7 +18,7 @@ export default class Product {
                             data,
                             e.target.value
                         )
-                        this.view.displayJuices(displayJuices, searchedJuices)
+                        view.displayJuices(displayJuices, searchedJuices)
                     })
             })
             .then(() => {
