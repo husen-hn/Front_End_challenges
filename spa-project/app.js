@@ -1,3 +1,7 @@
+import homePage from './pages/HomePage.js'
+import lastVideos from './pages/LastVideos.js'
+import lastPosts from './pages/LastPosts.js'
+
 function navTo(url) {
     history.pushState(null, null, url)
     router()
@@ -7,15 +11,15 @@ function router() {
     const routes = [
         {
             path: '/spa-project/',
-            view: () => console.log('/spa-project/')
+            view: homePage
         },
         {
             path: '/spa-project/last-videos',
-            view: () => console.log('/spa-project/last-videos')
+            view: lastVideos
         },
         {
             path: '/spa-project/last-posts',
-            view: () => console.log('/spa-project/last-posts')
+            view: lastPosts
         }
     ]
 
@@ -37,7 +41,7 @@ function router() {
         }
     }
 
-    console.log(match.route.view())
+    document.querySelector('#app').innerHTML = match.route.view()
 }
 
 document.addEventListener('popstate', router)
