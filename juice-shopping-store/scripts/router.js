@@ -7,6 +7,29 @@ export default class Router {
         this.detail = new Detail()
     }
 
+    init() {
+        document.body.addEventListener('click', (event) => {
+            if (event.target.matches('[data-link]')) {
+                event.preventDefault()
+                const url =
+                    'http://' +
+                    event.target.href.split('/')[
+                        event.target.href.split('/').length - 2
+                    ] +
+                    '/juice-shopping-store/' +
+                    event.target.href.split('/')[
+                        event.target.href.split('/').length - 1
+                    ]
+
+                // open url on click
+                this.navTo(url)
+            }
+        })
+
+        // open juices list on init
+        this.router()
+    }
+
     navTo(url) {
         history.pushState(null, null, url)
         this.router()
@@ -47,9 +70,11 @@ export default class Router {
 
     routes(page) {
         if (page === 'detail') {
-            return '/juice-detail'
+            return '/juice-shopping-store/juice-detail'
+        } else if (page === 'home') {
+            return '/juice-shopping-store/'
         } else {
-            return '/'
+            return '/juice-shopping-store/'
         }
     }
 }

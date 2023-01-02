@@ -8,7 +8,7 @@ export default class View {
         )
     }
 
-    displayJuices(storage, juices) {
+    displayJuices(storage, juices, router) {
         const cartItems = storage.getCartItems()
         let cartItemsId = []
         cartItems.map((item) => {
@@ -18,21 +18,13 @@ export default class View {
         juices.map((juice) => {
             juicesHTML += `
             <div class="products__juice">
-                <a href="/juice-detail" data-link >
-                    <div class="image-box">
-                        <img src=${juice.image} style="height: 120px" />
-                    </div>
-                <a href="/juice-detail" data-link >
+                <div class="image-box">
+                    <img src=${juice.image} style="height: 120px" />
+                </div>
                 <div class="about">
-                    <a href="/juice-detail" data-link >
-                        <h4 class="title">${juice.title}</h4>
-                    </a>
-                    <a href="/juice-detail" data-link >
-                        <h5 class="subtitle">${juice.volume}ml</h5>
-                    </a>
-                    <a href="/juice-detail" data-link >
-                        <div class="amount">${juice.price}</div>
-                    </a>
+                    <h4 class="title">${juice.title}</h4>
+                    <h5 class="subtitle">${juice.volume}ml</h5>
+                    <div class="amount">${juice.price}</div>
                     `
 
             const indexOfCartJuice = cartItems.findIndex(
@@ -147,6 +139,15 @@ export default class View {
 
                 // Reaload Products list page
                 product.initProducts(product, this, cart, storage)
+            })
+        })
+    }
+
+    setClickListenerRoute(elements, router, route) {
+        elements.forEach((element) => {
+            element.addEventListener('click', (event) => {
+                event.preventDefault()
+                router.navTo(route)
             })
         })
     }

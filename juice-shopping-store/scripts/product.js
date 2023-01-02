@@ -2,7 +2,7 @@ export default class Product {
     initProducts(product, view, cart, storage, router) {
         this.getProducts()
             .then((data) => {
-                view.displayJuices(storage, data)
+                view.displayJuices(storage, data, router)
                 view.setClickListenerAddToCartBtn(
                     storage,
                     cart,
@@ -18,8 +18,34 @@ export default class Product {
                             data,
                             e.target.value
                         )
-                        view.displayJuices(displayJuices, searchedJuices)
+                        view.displayJuices(
+                            displayJuices,
+                            searchedJuices,
+                            router
+                        )
                     })
+
+                // set click listener to route pages
+                view.setClickListenerRoute(
+                    [...document.querySelectorAll('.site-header__logo')],
+                    router,
+                    router.routes('home')
+                )
+                view.setClickListenerRoute(
+                    [...document.querySelectorAll('.site-header__home')],
+                    router,
+                    router.routes('home')
+                )
+                view.setClickListenerRoute(
+                    [...document.querySelectorAll('.image-box')],
+                    router,
+                    router.routes('detail')
+                )
+                view.setClickListenerRoute(
+                    [...document.querySelectorAll('.title')],
+                    router,
+                    router.routes('detail')
+                )
             })
             .then(() => {
                 // Prepare cart items to display
