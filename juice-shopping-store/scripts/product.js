@@ -8,7 +8,8 @@ export default class Product {
                     cart,
                     product,
                     data,
-                    [...document.querySelectorAll('.addToCart')]
+                    [...document.querySelectorAll('.addToCart')],
+                    router
                 )
 
                 document
@@ -52,7 +53,37 @@ export default class Product {
                 const cartJuices = storage.getCartItems()
                 view.prepareCartJuices(cart, storage, product, cartJuices)
                 // Display Cart on products "view in cart"
-                cart.openCartOnProductCartViews()
+                cart.openCartOnProductCartViews(
+                    '.view-in-cart__container--subtitle'
+                )
+            })
+    }
+
+    async initDetailProducts(id, product, view, cart, storage, router) {
+        await this.getProducts()
+            .then((data) => {
+                const juice = data.find((item) => item.id === id)
+                view.displayJuiceDetail(juice, product, storage, cart, router)
+                view.setClickListenerAddToCartBtn(
+                    storage,
+                    cart,
+                    product,
+                    data,
+                    [...document.querySelectorAll('.detail__prices-addToCart')],
+                    router
+                )
+
+                document
+                    .querySelector('.site-header__search')
+                    .addEventListener('click', (_) => {
+                        router.navTo(router.routes('home'))
+                    })
+            })
+            .then(() => {
+                // Display Cart on products "view in cart"
+                cart.openCartOnProductCartViews(
+                    '.detail__viewInCart__container--subtitle'
+                )
             })
     }
 

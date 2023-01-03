@@ -8,7 +8,7 @@ export default class View {
         )
     }
 
-    displayJuices(storage, juices, router) {
+    displayJuices(storage, juices) {
         const cartItems = storage.getCartItems()
         let cartItemsId = []
         cartItems.map((item) => {
@@ -18,11 +18,11 @@ export default class View {
         juices.map((juice) => {
             juicesHTML += `
             <div class="products__juice">
-                <div class="image-box">
+                <div class="image-box" data-id=${juice.id}>
                     <img src=${juice.image} style="height: 120px" />
                 </div>
                 <div class="about">
-                    <h4 class="title">${juice.title}</h4>
+                    <h4 class="title" data-id=${juice.id}>${juice.title}</h4>
                     <h5 class="subtitle">${juice.volume}ml</h5>
                     <div class="amount">${juice.price}</div>
                     `
@@ -58,7 +58,7 @@ export default class View {
         this.juices.innerHTML = juicesHTML
     }
 
-    prepareCartJuices(cart, storage, product, juices) {
+    prepareCartJuices(cart, storage, product, juices, router) {
         // Hide Cart if juices array is empty
         if (juices.length == 0) {
             cart.overlayCartOff()
@@ -70,19 +70,19 @@ export default class View {
             <div class="overlay-cart__cart-item">
                 <div class="overlay-cart__image-box">
                     <img src=${juice.image} style="height: 120px" />
-                    </div>
-                    <div class="overlay-cart__about">
+                </div>
+                <div class="overlay-cart__about">
                     <h1 class="overlay-cart__title">${juice.title}</h1>
                     <h3 class="overlay-cart__subtitle">${juice.volume}ml</h3>
                     <img src="images/veg.png" style="height: 30px"/>
-                    </div>
-                    <div class="overlay-cart__counter">
+                </div>
+                <div class="overlay-cart__counter">
                     <div class="overlay-cart__btn-plus" data-id=${juice.id}>+</div>
                     <div class="overlay-cart__count">${juice.amount}</div>
                     <div class="overlay-cart__btn-minus" data-id=${juice.id}>-</div>
-                    </div>
-                    <div class="overlay-cart__prices">
-                    <div class="overlay-cart__amount">${juice.price}</div>
+                </div>
+                <div class="overlay-cart__prices">
+                    <div class="overlay-cart__amount">$${juice.price}</div>
                     <div class="overlay-cart__remove" data-id=${juice.id}><u>Remove</u></div>
                 </div>
             </div>
@@ -93,10 +93,14 @@ export default class View {
 
         // Set Cart
         this.setClickListenerToCartJuicesPlus(product, storage, cart, juices, [
-            ...document.querySelectorAll('.overlay-cart__btn-plus')
+            ...document.querySelectorAll('.overlay-cart__btn-plus'),
+            'home',
+            router
         ])
         this.setClickListenerToCartJuicesMinus(product, cart, storage, juices, [
-            ...document.querySelectorAll('.overlay-cart__btn-minus')
+            ...document.querySelectorAll('.overlay-cart__btn-minus'),
+            'home',
+            router
         ])
         this.setClickListenerToCartJuicesRemove(
             cart,
@@ -119,7 +123,88 @@ export default class View {
         this.setCartTotalPrice(storage, product)
     }
 
-    setClickListenerAddToCartBtn(storage, cart, product, juices, btnElements) {
+    displayJuiceDetail(juice, product, storage, cart, router) {
+        let juiceHTML = '<p>Loading...</p>'
+
+        if (juice) {
+            juiceHTML = `
+                <div class="detail__container">
+                    <div class="detail__image-box">
+                        <img src=${juice.image} style="height: 120px" />
+                    </div>
+                    <div class="detail__about">
+                        <h1 class="detail__title">${juice.title}</h1>
+                        <h3 class="detail__subtitle">${juice.volume}ml</h3>
+                        <img src="images/veg.png" style="height: 30px"/>
+                    </div>
+                    <div class="detail__prices">
+                        <div class="detail__prices-amount">$${juice.price}</div>
+                        `
+            const cartItems = storage.getCartItems()
+            let cartItemsId = []
+            cartItems.map((item) => {
+                cartItemsId.push(item.id)
+            })
+
+            const indexOfCartJuice = cartItems.findIndex(
+                (item) => item.id === juice.id
+            )
+
+            if (indexOfCartJuice >= 0) {
+                juiceHTML += `
+                            <div class="detail__viewInCart__container">
+                                <div class="detail__viewInCart__container--subtitle">view in cart</div>
+                                <div class="detail__viewInCart__btn-plus" data-id=${cartItems[indexOfCartJuice].id}>+</div>
+                                <div class="detail__viewInCart__count">${cartItems[indexOfCartJuice].amount}</div>
+                                <div class="detail__viewInCart__btn-minus" data-id=${cartItems[indexOfCartJuice].id}>-</div>
+                            </div>
+                            `
+            } else {
+                juiceHTML += `
+                            <div class="detail__prices-addToCart" data-id=${juice.id}>
+                                <button class="button">
+                                    Add to Cart
+                                </button>
+                            </div>
+                            `
+            }
+            juiceHTML += `
+                    </div>
+                </div>`
+        } else {
+            router.navTo(router.routes('home'))
+        }
+
+        document.querySelector('.products').innerHTML = juiceHTML
+
+        this.setClickListenerToCartJuicesPlus(
+            product,
+            storage,
+            cart,
+            [juice],
+            [...document.querySelectorAll('.detail__viewInCart__btn-plus')],
+            'detail',
+            router
+        )
+        this.setClickListenerToCartJuicesMinus(
+            product,
+            cart,
+            storage,
+            [juice],
+            [...document.querySelectorAll('.detail__viewInCart__btn-minus')],
+            'detail',
+            router
+        )
+    }
+
+    setClickListenerAddToCartBtn(
+        storage,
+        cart,
+        product,
+        juices,
+        btnElements,
+        router
+    ) {
         btnElements.forEach((item) => {
             let id = item.dataset.id
             let juice = juices.find((item) => item.id == id)
@@ -132,13 +217,19 @@ export default class View {
 
                 // Update cart items
                 const cartJuices = storage.getCartItems()
-                this.prepareCartJuices(cart, storage, product, cartJuices)
+                this.prepareCartJuices(
+                    cart,
+                    storage,
+                    product,
+                    cartJuices,
+                    router
+                )
 
                 // Prepare Cart again to disable cant openned until item == 0
                 cart.cartInitProcess(product, storage)
 
                 // Reaload Products list page
-                product.initProducts(product, this, cart, storage)
+                product.initProducts(product, this, cart, storage, router)
             })
         })
     }
@@ -147,7 +238,14 @@ export default class View {
         elements.forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault()
-                router.navTo(route)
+
+                if (event.target.parentNode.dataset.id) {
+                    // set id on url param
+                    const params = new URLSearchParams()
+                    params.append('id', event.target.parentNode.dataset.id)
+
+                    router.navTo(route + '?' + params.toString())
+                } else router.navTo(route)
             })
         })
     }
@@ -157,7 +255,9 @@ export default class View {
         storage,
         cart,
         juices,
-        btnElements
+        btnElements,
+        path = 'home',
+        router
     ) {
         btnElements.forEach((item) => {
             const id = item.dataset.id
@@ -178,12 +278,30 @@ export default class View {
 
                 // Prepare new cart items to display
                 const cartJuices = storage.getCartItems()
-                this.prepareCartJuices(cart, storage, product, cartJuices)
+                this.prepareCartJuices(
+                    cart,
+                    storage,
+                    product,
+                    cartJuices,
+                    router
+                )
                 // Add cart items amount on home page
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
-                // Reaload Products list page
-                product.initProducts(product, this, cart, storage)
+
+                if (path === 'home')
+                    // Reaload Products list page
+                    product.initProducts(product, this, cart, storage, router)
+                else if (path === 'detail')
+                    // Reaload Products Detail page
+                    product.initDetailProducts(
+                        juices[0].id,
+                        product,
+                        this,
+                        cart,
+                        storage,
+                        router
+                    )
             })
         })
     }
@@ -193,7 +311,9 @@ export default class View {
         cart,
         storage,
         juices,
-        btnElements
+        btnElements,
+        path = 'home',
+        router
     ) {
         btnElements.forEach((item) => {
             const id = item.dataset.id
@@ -220,12 +340,30 @@ export default class View {
 
                 // Prepare new cart items to display
                 const cartJuices = storage.getCartItems()
-                this.prepareCartJuices(cart, storage, product, cartJuices)
+                this.prepareCartJuices(
+                    cart,
+                    storage,
+                    product,
+                    cartJuices,
+                    router
+                )
                 // Add cart items amount on home page
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
-                // Reaload Products list page
-                product.initProducts(product, this, cart, storage)
+
+                if (path === 'home')
+                    // Reaload Products list page
+                    product.initProducts(product, this, cart, storage, router)
+                else if (path === 'detail')
+                    // Reaload Products Detail page
+                    product.initDetailProducts(
+                        juices[0].id,
+                        product,
+                        this,
+                        cart,
+                        storage,
+                        router
+                    )
             })
         })
     }
@@ -236,7 +374,7 @@ export default class View {
 
             // Prepare new cart items to display
             const cartJuices = storage.getCartItems()
-            this.prepareCartJuices(cart, storage, product, cartJuices)
+            this.prepareCartJuices(cart, storage, product, cartJuices, router)
             // Add cart items amount on home page
             const cartAmount = product.getCartAmount(storage)
             this.setCartAmount(cartAmount)
@@ -262,7 +400,13 @@ export default class View {
 
                 // Prepare new cart items to display
                 const cartJuices = storage.getCartItems()
-                this.prepareCartJuices(cart, storage, product, cartJuices)
+                this.prepareCartJuices(
+                    cart,
+                    storage,
+                    product,
+                    cartJuices,
+                    router
+                )
                 // Add cart items amount on home page
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)

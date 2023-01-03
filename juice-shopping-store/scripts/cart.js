@@ -21,10 +21,8 @@ export default class Cart {
     }
 
     // this function have to run after display products
-    openCartOnProductCartViews() {
-        const productCartBtn = document.querySelectorAll(
-            '.view-in-cart__container--subtitle'
-        )
+    openCartOnProductCartViews(elClassName) {
+        const productCartBtn = document.querySelectorAll(elClassName)
 
         // Display Cart on products "view in cart"
         productCartBtn.forEach((juiceEl) => {
