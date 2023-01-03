@@ -92,29 +92,40 @@ export default class View {
         this.cartJuices.innerHTML = cartJuicesHTML
 
         // Set Cart
-        this.setClickListenerToCartJuicesPlus(product, storage, cart, juices, [
-            ...document.querySelectorAll('.overlay-cart__btn-plus'),
+        this.setClickListenerToCartJuicesPlus(
+            product,
+            storage,
+            cart,
+            juices,
+            [...document.querySelectorAll('.overlay-cart__btn-plus')],
             'home',
             router
-        ])
-        this.setClickListenerToCartJuicesMinus(product, cart, storage, juices, [
-            ...document.querySelectorAll('.overlay-cart__btn-minus'),
+        )
+        this.setClickListenerToCartJuicesMinus(
+            product,
+            storage,
+            cart,
+            juices,
+            [...document.querySelectorAll('.overlay-cart__btn-minus')],
             'home',
             router
-        ])
+        )
+
         this.setClickListenerToCartJuicesRemove(
             cart,
             storage,
             product,
             juices,
-            [...document.querySelectorAll('.overlay-cart__remove')]
+            [...document.querySelectorAll('.overlay-cart__remove')],
+            router
         )
 
         this.setClickListenerToJuicesRemoveAll(
             storage,
             cart,
             product,
-            document.querySelector('.overlay-cart__remove-all')
+            document.querySelector('.overlay-cart__remove-all'),
+            router
         )
         // Set Cart Botton informations
         // Set cart total amount
@@ -188,8 +199,8 @@ export default class View {
         )
         this.setClickListenerToCartJuicesMinus(
             product,
-            cart,
             storage,
+            cart,
             [juice],
             [...document.querySelectorAll('.detail__viewInCart__btn-minus')],
             'detail',
@@ -234,7 +245,7 @@ export default class View {
         })
     }
 
-    setClickListenerRoute(elements, router, route) {
+    setClickListenerRoute(elements, router, path) {
         elements.forEach((element) => {
             element.addEventListener('click', (event) => {
                 event.preventDefault()
@@ -244,8 +255,8 @@ export default class View {
                     const params = new URLSearchParams()
                     params.append('id', event.target.parentNode.dataset.id)
 
-                    router.navTo(route + '?' + params.toString())
-                } else router.navTo(route)
+                    router.navTo(path + '?' + params.toString())
+                } else router.navTo(path)
             })
         })
     }
@@ -259,12 +270,12 @@ export default class View {
         path = 'home',
         router
     ) {
-        btnElements.forEach((item) => {
-            const id = item.dataset.id
+        btnElements.forEach((btnElement) => {
+            const id = btnElement.dataset.id
             const index = juices.findIndex((item) => item.id === id)
             const juice = juices[index]
 
-            item.addEventListener('click', () => {
+            btnElement.addEventListener('click', () => {
                 juices.splice(index, 1, {
                     id: juice.id,
                     title: juice.title,
@@ -289,10 +300,10 @@ export default class View {
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
 
-                if (path === 'home')
+                if (path === 'home') {
                     // Reaload Products list page
                     product.initProducts(product, this, cart, storage, router)
-                else if (path === 'detail')
+                } else if (path === 'detail') {
                     // Reaload Products Detail page
                     product.initDetailProducts(
                         juices[0].id,
@@ -302,14 +313,15 @@ export default class View {
                         storage,
                         router
                     )
+                }
             })
         })
     }
 
     setClickListenerToCartJuicesMinus(
         product,
-        cart,
         storage,
+        cart,
         juices,
         btnElements,
         path = 'home',
@@ -368,7 +380,13 @@ export default class View {
         })
     }
 
-    setClickListenerToJuicesRemoveAll(storage, cart, product, btnElement) {
+    setClickListenerToJuicesRemoveAll(
+        storage,
+        cart,
+        product,
+        btnElement,
+        router
+    ) {
         btnElement.addEventListener('click', () => {
             storage.clearJuicesCart()
 
@@ -388,7 +406,8 @@ export default class View {
         storage,
         product,
         juices,
-        btnElement
+        btnElement,
+        router
     ) {
         btnElement.forEach((item) => {
             const id = item.dataset.id

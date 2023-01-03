@@ -27,6 +27,7 @@ export default class Product {
                     })
 
                 // set click listener to route pages
+
                 view.setClickListenerRoute(
                     [...document.querySelectorAll('.site-header__logo')],
                     router,
@@ -51,7 +52,13 @@ export default class Product {
             .then(() => {
                 // Prepare cart items to display
                 const cartJuices = storage.getCartItems()
-                view.prepareCartJuices(cart, storage, product, cartJuices)
+                view.prepareCartJuices(
+                    cart,
+                    storage,
+                    product,
+                    cartJuices,
+                    router
+                )
                 // Display Cart on products "view in cart"
                 cart.openCartOnProductCartViews(
                     '.view-in-cart__container--subtitle'
