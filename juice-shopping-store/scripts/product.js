@@ -9,7 +9,8 @@ export default class Product {
                     product,
                     data,
                     [...document.querySelectorAll('.addToCart')],
-                    router
+                    router,
+                    'home'
                 )
 
                 document
@@ -71,14 +72,50 @@ export default class Product {
             .then((data) => {
                 const juice = data.find((item) => item.id === id)
                 view.displayJuiceDetail(juice, product, storage, cart, router)
-                view.setClickListenerAddToCartBtn(
-                    storage,
-                    cart,
-                    product,
-                    data,
-                    [...document.querySelectorAll('.detail__prices-addToCart')],
-                    router
+
+                const cartItems = storage.getCartItems()
+                const indexOfJuiceInCart = cartItems.findIndex(
+                    (item) => item.id === juice.id
                 )
+
+                if (indexOfJuiceInCart < 0) {
+                    view.setClickListenerAddToCartBtn(
+                        storage,
+                        cart,
+                        product,
+                        [juice],
+                        [document.querySelector('.detail__prices-addToCart')],
+                        router,
+                        'detail'
+                    )
+                } else {
+                    view.setClickListenerToCartJuicesPlus(
+                        product,
+                        storage,
+                        cart,
+                        [cartItems[indexOfJuiceInCart]],
+                        [
+                            ...document.querySelectorAll(
+                                '.detail__viewInCart__btn-plus'
+                            )
+                        ],
+                        'detail',
+                        router
+                    )
+                    view.setClickListenerToCartJuicesMinus(
+                        product,
+                        storage,
+                        cart,
+                        [cartItems[indexOfJuiceInCart]],
+                        [
+                            ...document.querySelectorAll(
+                                '.detail__viewInCart__btn-minus'
+                            )
+                        ],
+                        'detail',
+                        router
+                    )
+                }
 
                 document
                     .querySelector('.site-header__search')

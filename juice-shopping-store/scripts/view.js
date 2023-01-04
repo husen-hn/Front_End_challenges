@@ -117,7 +117,8 @@ export default class View {
             product,
             juices,
             [...document.querySelectorAll('.overlay-cart__remove')],
-            router
+            router,
+            router.getPathName() == '/juice-shopping-store/' ? 'home' : 'detail'
         )
 
         this.setClickListenerToJuicesRemoveAll(
@@ -125,7 +126,8 @@ export default class View {
             cart,
             product,
             document.querySelector('.overlay-cart__remove-all'),
-            router
+            router,
+            router.getPathName() == '/juice-shopping-store/' ? 'home' : 'detail'
         )
         // Set Cart Botton informations
         // Set cart total amount
@@ -152,22 +154,18 @@ export default class View {
                         <div class="detail__prices-amount">$${juice.price}</div>
                         `
             const cartItems = storage.getCartItems()
-            let cartItemsId = []
-            cartItems.map((item) => {
-                cartItemsId.push(item.id)
-            })
 
-            const indexOfCartJuice = cartItems.findIndex(
+            const indexOfJuiceInCart = cartItems.findIndex(
                 (item) => item.id === juice.id
             )
 
-            if (indexOfCartJuice >= 0) {
+            if (indexOfJuiceInCart >= 0) {
                 juiceHTML += `
                             <div class="detail__viewInCart__container">
                                 <div class="detail__viewInCart__container--subtitle">view in cart</div>
-                                <div class="detail__viewInCart__btn-plus" data-id=${cartItems[indexOfCartJuice].id}>+</div>
-                                <div class="detail__viewInCart__count">${cartItems[indexOfCartJuice].amount}</div>
-                                <div class="detail__viewInCart__btn-minus" data-id=${cartItems[indexOfCartJuice].id}>-</div>
+                                <div class="detail__viewInCart__btn-plus" data-id=${cartItems[indexOfJuiceInCart].id}>+</div>
+                                <div class="detail__viewInCart__count">${cartItems[indexOfJuiceInCart].amount}</div>
+                                <div class="detail__viewInCart__btn-minus" data-id=${cartItems[indexOfJuiceInCart].id}>-</div>
                             </div>
                             `
             } else {
@@ -182,30 +180,11 @@ export default class View {
             juiceHTML += `
                     </div>
                 </div>`
+
+            document.querySelector('.products').innerHTML = juiceHTML
         } else {
             router.navTo(router.routes('home'))
         }
-
-        document.querySelector('.products').innerHTML = juiceHTML
-
-        this.setClickListenerToCartJuicesPlus(
-            product,
-            storage,
-            cart,
-            [juice],
-            [...document.querySelectorAll('.detail__viewInCart__btn-plus')],
-            'detail',
-            router
-        )
-        this.setClickListenerToCartJuicesMinus(
-            product,
-            storage,
-            cart,
-            [juice],
-            [...document.querySelectorAll('.detail__viewInCart__btn-minus')],
-            'detail',
-            router
-        )
     }
 
     setClickListenerAddToCartBtn(
@@ -214,7 +193,8 @@ export default class View {
         product,
         juices,
         btnElements,
-        router
+        router,
+        path
     ) {
         btnElements.forEach((item) => {
             let id = item.dataset.id
@@ -239,8 +219,20 @@ export default class View {
                 // Prepare Cart again to disable cant openned until item == 0
                 cart.cartInitProcess(product, storage)
 
-                // Reaload Products list page
-                product.initProducts(product, this, cart, storage, router)
+                if (path === 'home') {
+                    // Reaload Products list page
+                    product.initProducts(product, this, cart, storage, router)
+                } else if (path === 'detail') {
+                    // Reaload Products Detail page
+                    product.initDetailProducts(
+                        juice.id,
+                        product,
+                        this,
+                        cart,
+                        storage,
+                        router
+                    )
+                }
             })
         })
     }
@@ -306,7 +298,7 @@ export default class View {
                 } else if (path === 'detail') {
                     // Reaload Products Detail page
                     product.initDetailProducts(
-                        juices[0].id,
+                        juice.id,
                         product,
                         this,
                         cart,
@@ -366,16 +358,17 @@ export default class View {
                 if (path === 'home')
                     // Reaload Products list page
                     product.initProducts(product, this, cart, storage, router)
-                else if (path === 'detail')
+                else if (path === 'detail') {
                     // Reaload Products Detail page
                     product.initDetailProducts(
-                        juices[0].id,
+                        juice.id,
                         product,
                         this,
                         cart,
                         storage,
                         router
                     )
+                }
             })
         })
     }
@@ -385,7 +378,8 @@ export default class View {
         cart,
         product,
         btnElement,
-        router
+        router,
+        path
     ) {
         btnElement.addEventListener('click', () => {
             storage.clearJuicesCart()
@@ -398,6 +392,23 @@ export default class View {
             this.setCartAmount(cartAmount)
 
             cart.cartInitProcess(product, storage)
+
+            if (path === 'home') {
+                // Reaload Products list page
+                product.initProducts(product, this, cart, storage, router)
+            } else if (path === 'detail') {
+                const params = new URLSearchParams(window.location.search)
+                const id = params.get('id')
+                // Reaload Products Detail page
+                product.initDetailProducts(
+                    id,
+                    product,
+                    this,
+                    cart,
+                    storage,
+                    router
+                )
+            }
         })
     }
 
@@ -407,7 +418,8 @@ export default class View {
         product,
         juices,
         btnElement,
-        router
+        router,
+        path
     ) {
         btnElement.forEach((item) => {
             const id = item.dataset.id
@@ -429,6 +441,23 @@ export default class View {
                 // Add cart items amount on home page
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
+
+                if (path === 'home') {
+                    // Reaload Products list page
+                    product.initProducts(product, this, cart, storage, router)
+                } else if (path === 'detail') {
+                    const params = new URLSearchParams(window.location.search)
+                    const id = params.get('id')
+                    // Reaload Products Detail page
+                    product.initDetailProducts(
+                        id,
+                        product,
+                        this,
+                        cart,
+                        storage,
+                        router
+                    )
+                }
             })
         })
     }

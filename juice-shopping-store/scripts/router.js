@@ -59,4 +59,8 @@ export default class Router {
             return '/juice-shopping-store/'
         }
     }
+
+    getPathName() {
+        return location.pathname
+    }
 }
