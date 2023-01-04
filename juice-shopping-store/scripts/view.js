@@ -476,4 +476,59 @@ export default class View {
         let cartPrice = product.getCartTotalPrice(storage)
         this.cartTotalPrice.innerText = '$ ' + cartPrice
     }
+
+    // scrolls window to top
+    setupScrollEvent() {
+        const scrollButton = document.querySelector('.scroll-top')
+
+        scrollButton.addEventListener('click', (_) => {
+            this.smoothVerticalScrolling(scrollButton.parentElement, 250, 'top')
+        })
+    }
+
+    // prepares the window for a scroll event to show the scroll button
+    setupScrollListener() {
+        window.addEventListener('scroll', (_) => {
+            const scrollButton = document.querySelector('.scroll-top')
+
+            const scrollOffset = window.scrollY
+            const scrollBreakpoint = window.innerHeight * 0.9
+
+            if (scrollOffset >= scrollBreakpoint) {
+                scrollButton.classList.add('visible')
+            } else if (scrollOffset <= 0) {
+                scrollButton.classList.remove('visible')
+            }
+        })
+    }
+
+    smoothVerticalScrolling(e, time, where) {
+        // gets the element's top position relative to the viewport
+        const eTop = e.getBoundingClientRect().top
+
+        // divides the top offset into 100 steps to be ellapsed
+        const eAmt = eTop / 100
+
+        // starting time
+        let curTime = 0
+
+        // not to exceed the desired duration
+        while (curTime <= time) {
+            // call a function to execute at one hundreth of the desired scroll time
+            window.setTimeout(this.SVS_B, curTime, eAmt, where)
+            // increase by one hundreth of the desired time to execute exactly 100 times
+            curTime += time / 100
+        }
+    }
+
+    SVS_B(eAmt, where) {
+        // scroll by half the hundredth of the top offset if destination is not top (since to center only involves scrolling either in the top or bottom half of the window)
+        if (where == 'center' || where == '') {
+            window.scrollBy(0, eAmt / 2)
+        }
+        // otherwise scroll the full amount
+        if (where == 'top') {
+            window.scrollBy(0, eAmt)
+        }
+    }
 }

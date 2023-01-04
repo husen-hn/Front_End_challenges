@@ -171,3 +171,33 @@ cursor: pointer;
     color: rgb(179, 179, 179);
 	cursor: pointer;
 }
+
+.scroll-top {
+	background: deeppink;
+	border: 0;
+	border-radius: 50%;
+	bottom: 0;
+	cursor: pointer;
+	height: 50px;
+	margin: 15px;
+	opacity: 0.75;
+	position: fixed;
+	right: -70px;
+	transition: right 0.2s ease-in-out;
+	width: 50px;
+	z-index: 99;
+}
+.scroll-top.visible {
+	right: 0;
+}
+
+.arrow {
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	margin-top: 5px;
+	padding: 4px;
+}
+.arrow.up {  
+	transform: rotate(-135deg);
+}

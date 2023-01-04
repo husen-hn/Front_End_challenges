@@ -28,7 +28,6 @@ export default class Product {
                     })
 
                 // set click listener to route pages
-
                 view.setClickListenerRoute(
                     [...document.querySelectorAll('.site-header__logo')],
                     router,
@@ -49,6 +48,10 @@ export default class Product {
                     router,
                     router.routes('detail')
                 )
+
+                // scroll up
+                view.setupScrollListener()
+                view.setupScrollEvent()
             })
             .then(() => {
                 // Prepare cart items to display
