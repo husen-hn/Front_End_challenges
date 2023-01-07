@@ -32,7 +32,7 @@ export default class Router {
         const matchRoutes = routes.map((route) => {
             return {
                 route: route,
-                isMatch: location.pathname === route.path
+                isMatch: this.getPathName() === route.path
             }
         })
 
@@ -46,8 +46,7 @@ export default class Router {
                 match: true
             }
         }
-        console.log('pathname: ' + location.pathname)
-        console.log('route:    ' + match.route.path)
+
         match.route.view()
     }
 
@@ -65,6 +64,6 @@ export default class Router {
         const pathNameBySlash = location.pathname.split('/')
         if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
             return location.pathname.slice(0, -10)
-        else return location.pathname
+        else return location.pathname.trim()
     }
 }
