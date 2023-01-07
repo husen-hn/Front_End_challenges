@@ -52,11 +52,11 @@ export default class Router {
 
     routes(page) {
         if (page === 'detail') {
-            return '/juice-shopping-store/juice-detail'
+            return location.pathname + 'juice-detail'
         } else if (page === 'home') {
-            return '/juice-shopping-store/'
+            return location.pathname
         } else {
-            return '/juice-shopping-store/'
+            return location.pathname
         }
     }
 
