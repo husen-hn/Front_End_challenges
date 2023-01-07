@@ -46,7 +46,8 @@ export default class Router {
                 match: true
             }
         }
-
+        console.log('pathname: ' + location.pathname)
+        console.log('route:    ' + match.route.path)
         match.route.view()
     }
 
