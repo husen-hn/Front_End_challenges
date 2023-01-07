@@ -20,11 +20,11 @@ export default class Router {
     router() {
         const routes = [
             {
-                path: '/juice-shopping-store/',
+                path: this.getPathName(),
                 view: this.home.view
             },
             {
-                path: '/juice-shopping-store/juice-detail',
+                path: this.getPathName() + 'juice-detail',
                 view: this.detail.view
             }
         ]
