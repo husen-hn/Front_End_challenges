@@ -52,15 +52,18 @@ export default class Router {
 
     routes(page) {
         if (page === 'detail') {
-            return location.pathname + 'juice-detail'
+            return this.getPathName() + 'juice-detail'
         } else if (page === 'home') {
-            return location.pathname
+            return this.getPathName()
         } else {
-            return location.pathname
+            return this.getPathName()
         }
     }
 
     getPathName() {
-        return location.pathname
+        const pathNameBySlash = location.pathname.split('/')
+        if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
+            return location.pathname.slice(0, -10)
+        else return location.pathname
     }
 }
