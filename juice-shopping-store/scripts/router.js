@@ -5,6 +5,37 @@ export default class Router {
     constructor() {
         this.home = new Home()
         this.detail = new Detail()
+        this.pages = {
+            home: '',
+            detail: 'juice-detail'
+        }
+        this.root = () => {
+            //FIX: if root url contain or equal one of the our pages name -> error
+            const pages = [
+                'index.html',
+                location.host,
+                ...Object.values(this.pages)
+            ]
+            let urlBySlash = location.href.split('/')
+
+            //delete protocol
+            urlBySlash.shift()
+
+            pages.forEach((page) => {
+                urlBySlash.forEach((url, urlIndex) => {
+                    if (url.includes(page)) {
+                        urlBySlash.splice(urlIndex, 1)
+                    }
+                })
+            })
+
+            let rootPath = '/'
+            urlBySlash.forEach((e) => {
+                rootPath += e.trim() + '/'
+            })
+
+            return rootPath
+        }
     }
 
     init() {
@@ -20,11 +51,11 @@ export default class Router {
     router() {
         const routes = [
             {
-                path: this.getPathName(),
+                path: this.getRootName(),
                 view: this.home.view
             },
             {
-                path: this.getPathName() + 'juice-detail',
+                path: this.getRootName() + 'juice-detail',
                 view: this.detail.view
             }
         ]
@@ -52,18 +83,25 @@ export default class Router {
 
     routes(page) {
         if (page === 'detail') {
-            return this.getPathName() + 'juice-detail'
+            return this.getRootName() + this.pages.detail
         } else if (page === 'home') {
-            return this.getPathName()
+            return this.getRootName() + this.pages.home
         } else {
-            return this.getPathName()
+            return this.getRootName() + this.pages.home
         }
+    }
+
+    getRootName() {
+        const pathNameBySlash = this.root().split('/')
+        if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
+            return this.root().slice(0, -10)
+        else return this.root()
     }
 
     getPathName() {
         const pathNameBySlash = location.pathname.split('/')
         if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
             return location.pathname.slice(0, -10)
-        else return location.pathname.trim()
+        else return location.pathname
     }
 }
