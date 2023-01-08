@@ -23,7 +23,7 @@ export default class Router {
 
             pages.forEach((page) => {
                 urlBySlash.forEach((url, urlIndex) => {
-                    if (url.includes(page)) {
+                    if (url.trim().includes(page.trim())) {
                         urlBySlash.splice(urlIndex, 1)
                     }
                 })
@@ -31,9 +31,10 @@ export default class Router {
 
             let rootPath = '/'
             urlBySlash.forEach((e) => {
-                rootPath += e.trim() + '/'
+                rootPath += e + '/'
             })
-
+            console.log('rootPath: ' + rootPath)
+            console.log('host: ' + location.host)
             return rootPath
         }
     }
