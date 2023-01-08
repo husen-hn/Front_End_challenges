@@ -9,8 +9,7 @@ export default class Product {
                     product,
                     data,
                     [...document.querySelectorAll('.addToCart')],
-                    router,
-                    'home'
+                    router
                 )
 
                 document
@@ -74,7 +73,7 @@ export default class Product {
         await this.getProducts()
             .then((data) => {
                 const juice = data.find((item) => item.id === id)
-                view.displayJuiceDetail(juice, product, storage, cart, router)
+                view.displayJuiceDetail(juice, storage, router)
 
                 const cartItems = storage.getCartItems()
                 const indexOfJuiceInCart = cartItems.findIndex(
@@ -88,8 +87,7 @@ export default class Product {
                         product,
                         [juice],
                         [document.querySelector('.detail__prices-addToCart')],
-                        router,
-                        'detail'
+                        router
                     )
                 } else {
                     view.setClickListenerToCartJuicesPlus(
@@ -102,7 +100,6 @@ export default class Product {
                                 '.detail__viewInCart__btn-plus'
                             )
                         ],
-                        'detail',
                         router
                     )
                     view.setClickListenerToCartJuicesMinus(
@@ -115,7 +112,7 @@ export default class Product {
                                 '.detail__viewInCart__btn-minus'
                             )
                         ],
-                        'detail',
+
                         router
                     )
                 }

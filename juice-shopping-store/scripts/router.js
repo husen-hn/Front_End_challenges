@@ -14,16 +14,22 @@ export default class Router {
             const pages = [
                 'index.html',
                 location.host,
+
                 ...Object.values(this.pages)
             ]
             let urlBySlash = location.href.split('/')
 
             //delete protocol
-            urlBySlash.shift()
+            urlBySlash.shift() // delete http or https ...
+            urlBySlash.shift() // delete empty between two slashes http://
 
             pages.forEach((page) => {
                 urlBySlash.forEach((url, urlIndex) => {
-                    if (url.trim().includes(page.trim())) {
+                    if (
+                        url.trim() !== '' &&
+                        page.trim() !== '' &&
+                        url.trim().includes(page.trim())
+                    ) {
                         urlBySlash.splice(urlIndex, 1)
                     }
                 })
@@ -31,10 +37,9 @@ export default class Router {
 
             let rootPath = '/'
             urlBySlash.forEach((e) => {
-                rootPath += e + '/'
+                if (e.trim() !== '') rootPath += e + '/'
             })
-            console.log('rootPath: ' + rootPath)
-            console.log('host: ' + location.host)
+
             return rootPath
         }
     }
@@ -52,11 +57,11 @@ export default class Router {
     router() {
         const routes = [
             {
-                path: this.getRootName(),
+                path: this.root(),
                 view: this.home.view
             },
             {
-                path: this.getRootName() + 'juice-detail',
+                path: this.root() + 'juice-detail',
                 view: this.detail.view
             }
         ]
@@ -84,19 +89,12 @@ export default class Router {
 
     routes(page) {
         if (page === 'detail') {
-            return this.getRootName() + this.pages.detail
+            return this.root() + this.pages.detail
         } else if (page === 'home') {
-            return this.getRootName() + this.pages.home
+            return this.root() + this.pages.home
         } else {
-            return this.getRootName() + this.pages.home
+            return this.root() + this.pages.home
         }
-    }
-
-    getRootName() {
-        const pathNameBySlash = this.root().split('/')
-        if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
-            return this.root().slice(0, -10)
-        else return this.root()
     }
 
     getPathName() {
@@ -104,5 +102,11 @@ export default class Router {
         if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
             return location.pathname.slice(0, -10)
         else return location.pathname
+    }
+
+    getNameOfPath(path) {
+        if (path === '/juice-shopping-store/') return 'home'
+        else if (path === '/juice-shopping-store/juice-detail') return 'detail'
+        else return 'home'
     }
 }
