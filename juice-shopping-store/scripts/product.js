@@ -38,12 +38,7 @@ export default class Product {
                     router.routes('home')
                 )
                 view.setClickListenerRoute(
-                    [...document.querySelectorAll('.image-box')],
-                    router,
-                    router.routes('detail')
-                )
-                view.setClickListenerRoute(
-                    [...document.querySelectorAll('.title')],
+                    document.querySelectorAll('.image-box'),
                     router,
                     router.routes('detail')
                 )
@@ -64,7 +59,9 @@ export default class Product {
                 )
                 // Display Cart on products "view in cart"
                 cart.openCartOnProductCartViews(
-                    '.view-in-cart__container--subtitle'
+                    '.view-in-cart__container--subtitle',
+                    this,
+                    storage
                 )
             })
     }
@@ -126,7 +123,9 @@ export default class Product {
             .then(() => {
                 // Display Cart on products "view in cart"
                 cart.openCartOnProductCartViews(
-                    '.detail__viewInCart__container--subtitle'
+                    '.detail__viewInCart__container--subtitle',
+                    this,
+                    storage
                 )
             })
     }

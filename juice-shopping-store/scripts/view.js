@@ -22,7 +22,7 @@ export default class View {
                     <img src=${juice.image} style="height: 120px" />
                 </div>
                 <div class="about">
-                    <h4 class="title" data-id=${juice.id}>${juice.title}</h4>
+                    <h4 class="title">${juice.title}</h4>
                     <h5 class="subtitle">${juice.volume}ml</h5>
                     <div class="amount">$${juice.price}</div>
                     `
@@ -62,6 +62,7 @@ export default class View {
         // Hide Cart if juices array is empty
         if (juices.length == 0) {
             cart.overlayCartOff()
+            cart.overplayEmptyCartOff()
         }
 
         let cartJuicesHTML = ''

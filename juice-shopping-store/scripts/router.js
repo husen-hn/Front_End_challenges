@@ -105,8 +105,8 @@ export default class Router {
     }
 
     getNameOfPath(path) {
-        if (path === '/juice-shopping-store/') return 'home'
-        else if (path === '/juice-shopping-store/juice-detail') return 'detail'
+        if (path === this.root) return 'home'
+        else if (path === this.root() + this.pages.detail) return 'detail'
         else return 'home'
     }
 }
