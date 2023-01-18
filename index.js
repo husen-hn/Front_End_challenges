@@ -1,4 +1,5 @@
-let contentDiv = document.getElementById("content");
+const contentDiv = document.getElementById("content");
+console.log(contentDiv);
 
 let routes = {
   "/": homepage,
