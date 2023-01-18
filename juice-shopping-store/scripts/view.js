@@ -18,7 +18,7 @@ export default class View {
         juices.map((juice) => {
             juicesHTML += `
             <div class="products__juice">
-                <div class="image-box" data-id=${juice.id}>
+                <div class="image-box" data-juice-detail-id=${juice.id}>
                     <img src=${juice.image} style="height: 120px" />
                 </div>
                 <div class="about">
@@ -34,14 +34,14 @@ export default class View {
                 juicesHTML += `
                         <div class="view-in-cart__container">
                             <div class="view-in-cart__container--subtitle">view in cart</div>
-                            <div class="overlay-cart__btn-plus" data-id=${cartItems[indexOfCartJuice].id}>+</div>
+                            <div class="overlay-cart__btn-plus" data-juice-detail-id=${cartItems[indexOfCartJuice].id}>+</div>
                             <div class="view-in-cart__count">${cartItems[indexOfCartJuice].amount}</div>
-                            <div class="overlay-cart__btn-minus" data-id=${cartItems[indexOfCartJuice].id}>-</div>
+                            <div class="overlay-cart__btn-minus" data-juice-detail-id=${cartItems[indexOfCartJuice].id}>-</div>
                         </div>
                         `
             } else {
                 juicesHTML += `
-                        <div class="addToCart" data-id=${juice.id}>
+                        <div class="addToCart" data-juice-detail-id=${juice.id}>
                             <button class="button">
                                 Add to Cart
                             </button>
@@ -78,13 +78,13 @@ export default class View {
                     <img src="images/veg.png" style="height: 30px"/>
                 </div>
                 <div class="overlay-cart__counter">
-                    <div class="overlay-cart__btn-plus" data-id=${juice.id}>+</div>
+                    <div class="overlay-cart__btn-plus" data-juice-detail-id=${juice.id}>+</div>
                     <div class="overlay-cart__count">${juice.amount}</div>
-                    <div class="overlay-cart__btn-minus" data-id=${juice.id}>-</div>
+                    <div class="overlay-cart__btn-minus" data-juice-detail-id=${juice.id}>-</div>
                 </div>
                 <div class="overlay-cart__prices">
                     <div class="overlay-cart__amount">$${juice.price}</div>
-                    <div class="overlay-cart__remove" data-id=${juice.id}><u>Remove</u></div>
+                    <div class="overlay-cart__remove" data-juice-detail-id=${juice.id}><u>Remove</u></div>
                 </div>
             </div>
             `
@@ -160,14 +160,14 @@ export default class View {
                 juiceHTML += `
                             <div class="detail__viewInCart__container">
                                 <div class="detail__viewInCart__container--subtitle">view in cart</div>
-                                <div class="detail__viewInCart__btn-plus" data-id=${cartItems[indexOfJuiceInCart].id}>+</div>
+                                <div class="detail__viewInCart__btn-plus" data-juice-detail-id=${cartItems[indexOfJuiceInCart].id}>+</div>
                                 <div class="detail__viewInCart__count">${cartItems[indexOfJuiceInCart].amount}</div>
-                                <div class="detail__viewInCart__btn-minus" data-id=${cartItems[indexOfJuiceInCart].id}>-</div>
+                                <div class="detail__viewInCart__btn-minus" data-juice-detail-id=${cartItems[indexOfJuiceInCart].id}>-</div>
                             </div>
                             `
             } else {
                 juiceHTML += `
-                            <div class="detail__prices-addToCart" data-id=${juice.id}>
+                            <div class="detail__prices-addToCart" data-juice-detail-id=${juice.id}>
                                 <button class="button">
                                     Add to Cart
                                 </button>
@@ -180,7 +180,7 @@ export default class View {
 
             document.querySelector('.products').innerHTML = juiceHTML
         } else {
-            router.navTo(router.routes('home'))
+            router.navToHome()
         }
     }
 
@@ -193,7 +193,7 @@ export default class View {
         router
     ) {
         btnElements.forEach((item) => {
-            let id = item.dataset.id
+            let id = item.dataset.juiceDetailId
             let juice = juices.find((item) => item.id == id)
             item.addEventListener('click', () => {
                 storage.saveOnCart(juice)
@@ -215,12 +215,10 @@ export default class View {
                 // Prepare Cart again to disable cant openned until item == 0
                 cart.cartInitProcess(product, storage)
 
-                if (router.getNameOfPath(location.pathname) === 'home') {
+                if (router.getNameOfPath() === 'home') {
                     // Reaload Products list page
                     product.initProducts(product, this, cart, storage, router)
-                } else if (
-                    router.getNameOfPath(location.pathname) === 'detail'
-                ) {
+                } else if (router.getNameOfPath() === 'detail') {
                     // Reaload Products Detail page
                     product.initDetailProducts(
                         juice.id,
@@ -240,13 +238,11 @@ export default class View {
             element.addEventListener('click', (event) => {
                 event.preventDefault()
 
-                if (event.target.parentNode.dataset.id) {
-                    // set id on url param
-                    const params = new URLSearchParams()
-                    params.append('id', event.target.parentNode.dataset.id)
-
-                    router.navTo(path + '?' + params.toString())
-                } else router.navTo(path)
+                if (path === 'detail') {
+                    router.navToJuiceDetail(
+                        event.target.parentNode.dataset.juiceDetailId
+                    )
+                } else router.navToHome()
             })
         })
     }
@@ -260,7 +256,7 @@ export default class View {
         router
     ) {
         btnElements.forEach((btnElement) => {
-            const id = btnElement.dataset.id
+            const id = btnElement.dataset.juiceDetailId
             const index = juices.findIndex((item) => item.id === id)
             const juice = juices[index]
 
@@ -318,7 +314,7 @@ export default class View {
         router
     ) {
         btnElements.forEach((item) => {
-            const id = item.dataset.id
+            const id = item.dataset.juiceDetailId
             const index = juices.findIndex((item) => item.id === id)
             const juice = juices[index]
 
@@ -390,12 +386,12 @@ export default class View {
 
             cart.cartInitProcess(product, storage)
 
-            if (router.getNameOfPath(location.pathname) === 'home') {
+            if (router.getNameOfPath() === 'home') {
                 // Reaload Products list page
                 product.initProducts(product, this, cart, storage, router)
-            } else if (router.getNameOfPath(location.pathname) === 'detail') {
+            } else if (router.getNameOfPath() === 'detail') {
                 const params = new URLSearchParams(window.location.search)
-                const id = params.get('id')
+                const id = params.get('juice-detail-id')
                 // Reaload Products Detail page
                 product.initDetailProducts(
                     id,
@@ -418,7 +414,7 @@ export default class View {
         router
     ) {
         btnElement.forEach((item) => {
-            const id = item.dataset.id
+            const id = item.dataset.juiceDetailId
             const index = juices.findIndex((item) => item.id === id)
 
             item.addEventListener('click', () => {
@@ -438,14 +434,12 @@ export default class View {
                 const cartAmount = product.getCartAmount(storage)
                 this.setCartAmount(cartAmount)
 
-                if (router.getNameOfPath(location.pathname) === 'home') {
+                if (router.getNameOfPath() === 'home') {
                     // Reaload Products list page
                     product.initProducts(product, this, cart, storage, router)
-                } else if (
-                    router.getNameOfPath(location.pathname) === 'detail'
-                ) {
+                } else if (router.getNameOfPath() === 'detail') {
                     const params = new URLSearchParams(window.location.search)
-                    const id = params.get('id')
+                    const id = params.get('juice-detail-id')
                     // Reaload Products Detail page
                     product.initDetailProducts(
                         id,

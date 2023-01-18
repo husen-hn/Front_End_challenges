@@ -13,7 +13,7 @@ export default class Detail {
         const cart = new Cart()
 
         const params = new URLSearchParams(window.location.search)
-        const id = params.get('id')
+        const id = params.get('juice-detail-id')
 
         product.initDetailProducts(id, product, view, cart, storage, router)
     }

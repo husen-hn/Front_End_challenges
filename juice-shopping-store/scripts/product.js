@@ -30,17 +30,17 @@ export default class Product {
                 view.setClickListenerRoute(
                     [...document.querySelectorAll('.site-header__logo')],
                     router,
-                    router.routes('home')
+                    'home'
                 )
                 view.setClickListenerRoute(
                     [...document.querySelectorAll('.site-header__home')],
                     router,
-                    router.routes('home')
+                    'home'
                 )
                 view.setClickListenerRoute(
                     document.querySelectorAll('.image-box'),
                     router,
-                    router.routes('detail')
+                    'detail'
                 )
 
                 // scroll up
@@ -73,6 +73,7 @@ export default class Product {
                 view.displayJuiceDetail(juice, storage, router)
 
                 const cartItems = storage.getCartItems()
+
                 const indexOfJuiceInCart = cartItems.findIndex(
                     (item) => item.id === juice.id
                 )
@@ -117,7 +118,7 @@ export default class Product {
                 document
                     .querySelector('.site-header__search')
                     .addEventListener('click', (_) => {
-                        router.navTo(router.routes('home'))
+                        router.navToHome()
                     })
             })
             .then(() => {

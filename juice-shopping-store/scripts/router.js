@@ -5,18 +5,8 @@ export default class Router {
     constructor() {
         this.home = new Home()
         this.detail = new Detail()
-        this.pages = {
-            home: '',
-            detail: 'juice-detail'
-        }
         this.root = () => {
-            //FIX: if root url contain or equal one of the our pages name -> error
-            const pages = [
-                'index.html',
-                location.host,
-
-                ...Object.values(this.pages)
-            ]
+            const pages = ['index.html', location.host]
             let urlBySlash = location.href.split('/')
 
             //delete protocol
@@ -40,7 +30,7 @@ export default class Router {
                 if (e.trim() !== '') rootPath += e + '/'
             })
 
-            return rootPath
+            return rootPath.split('?')[0]
         }
     }
 
@@ -57,56 +47,46 @@ export default class Router {
     router() {
         const routes = [
             {
-                path: this.root(),
+                name: 'home',
                 view: this.home.view
             },
             {
-                path: this.root() + 'juice-detail',
+                name: 'detail',
                 view: this.detail.view
             }
         ]
 
-        const matchRoutes = routes.map((route) => {
-            return {
-                route: route,
-                isMatch: this.getPathName() === route.path
-            }
-        })
-
-        let match = matchRoutes.find((item) => {
-            return item.isMatch
-        })
-
-        if (!match) {
-            match = {
-                route: routes[0],
-                match: true
-            }
-        }
-
-        match.route.view()
+        const params = new URLSearchParams(window.location.search)
+        const id = params.get('juice-detail-id')
+        if (id)
+            routes.map((e) => {
+                if (e.name === 'detail') e.view()
+            })
+        else
+            routes.map((e) => {
+                if (e.name === 'home') e.view()
+            })
     }
 
-    routes(page) {
-        if (page === 'detail') {
-            return this.root() + this.pages.detail
-        } else if (page === 'home') {
-            return this.root() + this.pages.home
-        } else {
-            return this.root() + this.pages.home
-        }
+    navToHome() {
+        history.pushState(null, null, this.root())
+        this.home.view()
     }
 
-    getPathName() {
-        const pathNameBySlash = location.pathname.split('/')
-        if (pathNameBySlash[pathNameBySlash.length - 1] === 'index.html')
-            return location.pathname.slice(0, -10)
-        else return location.pathname
+    navToJuiceDetail(id) {
+        const params = new URLSearchParams()
+        params.append('juice-detail-id', id)
+
+        history.pushState(null, null, this.root() + '?' + params.toString())
+
+        this.detail.view()
     }
 
-    getNameOfPath(path) {
-        if (path === this.root) return 'home'
-        else if (path === this.root() + this.pages.detail) return 'detail'
+    getNameOfPath() {
+        const params = new URLSearchParams(window.location.search)
+        const id = params.get('juice-detail-id')
+        if (id) return 'detail'
+        else if (location.pathname === this.root) return 'home'
         else return 'home'
     }
 }
