@@ -12,7 +12,11 @@ window.onpopstate = () => {
 };
 
 let onNavItemClick = (pathName) => {
-  window.history.pushState({}, pathName, window.location.origin + pathName);
+  window.history.pushState(
+    {},
+    pathName,
+    window.location.origin + "/Front_End_challenges" + pathName
+  );
   contentDiv.innerHTML = routes[pathName];
 };
 
