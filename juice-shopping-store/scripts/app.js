@@ -24,8 +24,8 @@ let onNavItemClick = (pathName) => {
         {},
         pathName,
         window.location.origin +
-            // '/Front_End_challenges/juice-shopping-store' +
-            '/juice-shopping-store' +
+            '/Front_End_challenges/juice-shopping-store' +
+            // '/juice-shopping-store' +
             pathName
     )
     contentDiv.innerHTML = routes[pathName]
