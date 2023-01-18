@@ -1,7 +1,20 @@
-import Router from './router.js'
+// import Router from './router.js'
 
-const router = new Router()
+// const router = new Router()
 
-document.addEventListener('popstate', router.router)
+// document.addEventListener('popstate', router.router)
 
-document.addEventListener('DOMContentLoaded', () => router.init())
+// document.addEventListener('DOMContentLoaded', () => router.init())
+
+let routes = {
+    '/': homepage,
+    '/index.html': homepage,
+    '/portfolio': portfolio,
+    '/work': work,
+    '/contact': contact
+}
+
+window.onpopstate = () => {
+    console.log('onpopstate')
+    contentDiv.innerHTML = routes[window.location.pathname]
+}
