@@ -1,70 +1,100 @@
+<style>
+    h1 {
+        color: #1d8991 #b877db #07da8c #fdf0ed #f77d26 #f43e5c #59e3e3 #af5427
+            #dc3318 #f9cbbe #f6661e;
+    }
+</style>
+
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Juice Shopping</title>
-	<link rel="stylesheet" type="text/css" href="./styles/style.css">
-    <link rel="stylesheet" type="text/css" href="./styles/cart-style.css">
-    <link rel="stylesheet" type="text/css" href="./styles/detail-style.css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-</head>
-<body>
-    <head class="site-header">
-        <nav class="site-navigation">
-            <ul class="nav">
-                <li>
-                    <div class="site-header__logo">
-                        <h3>Juice Shopping</h3>
-                    </div>
-                </li>
-                <li>
-                    <div class="site-header__search">
-                        <input type="text" name="juice-search" placeholder="Search...">
-                    </div>
-                </li>
-                <li>
-                    <div class="site-header__home">Home</div>
-                </li>
-                <li>
-                    <div class="cart-btn">
-                        <div class="cart-items">0</div>
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                    </div>
-                </li>
-            </ul>
-        </nav>
+    <head>
+        <title>Juice Shopping</title>
+        <link rel="stylesheet" type="text/css" href="./styles/style.css" />
+        <link rel="stylesheet" type="text/css" href="./styles/cart-style.css" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="./styles/detail-style.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
     </head>
-    <button class="scroll-top">
-        <div class="arrow up"></div>
-    </button>
-    <div class="products"></div>
-    <div class="overlay-cart">
-        <div class="overlay-cart__container">
-            <span class="material-symbols-outlined overlay-cart__delete">clear</span>
-            <div class="overlay-cart__header">
-                <h3 class="overlay-cart__heading">Shopping Cart</h3>
-                <h5 class="overlay-cart__remove-all">Remove all</h5>
-            </div>
-            <div class="overlay-cart__cart-items"></div>
-            <hr> 
-            <div class="overlay-cart__checkout">
-                <div class="overlay-cart__total">
-                <div>
-                    <div class="overlay-cart__subtotal">Sub-Total</div>
-                    <div class="overlay-cart__items"></div>
+    <body>
+        <head class="site-header">
+            <nav class="site-navigation">
+                <ul class="nav">
+                    <li>
+                        <div class="site-header__logo">
+                            <h3>Juice Shopping</h3>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="site-header__search">
+                            <input
+                                type="text"
+                                name="juice-search"
+                                placeholder="Search..."
+                            />
+                        </div>
+                    </li>
+                    <li>
+                        <div class="site-header__home">Home</div>
+                    </li>
+                    <li>
+                        <div class="cart-btn">
+                            <div class="cart-items">0</div>
+                            <span class="material-symbols-outlined"
+                                >shopping_cart</span
+                            >
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </head>
+        <button class="scroll-top">
+            <div class="arrow up"></div>
+        </button>
+        <div class="products"></div>
+        <div class="overlay-cart">
+            <div class="overlay-cart__container">
+                <span class="material-symbols-outlined overlay-cart__delete"
+                    >clear</span
+                >
+                <div class="overlay-cart__header">
+                    <h3 class="overlay-cart__heading">Shopping Cart</h3>
+                    <h5 class="overlay-cart__remove-all">Remove all</h5>
                 </div>
-                <div class="overlay-cart__total-amount"></div>
+                <div class="overlay-cart__cart-items"></div>
+                <hr />
+                <div class="overlay-cart__checkout">
+                    <div class="overlay-cart__total">
+                        <div>
+                            <div class="overlay-cart__subtotal">Sub-Total</div>
+                            <div class="overlay-cart__items"></div>
+                        </div>
+                        <div class="overlay-cart__total-amount"></div>
+                    </div>
+                    <button class="overlay-cart__button">Checkout</button>
                 </div>
-                <button class="overlay-cart__button">Checkout</button>
             </div>
         </div>
-    </div>
-    <div class="overlay-empty-cart">
-        <div class="overlay-empty-cart__container">
-            <span class="material-symbols-outlined overlay-empty-cart__delete">clear</span>
-            <h4 class="overlay-empty-cart__content">Your shopping cart is empty</h4>
+        <div class="overlay-empty-cart">
+            <div class="overlay-empty-cart__container">
+                <span
+                    class="material-symbols-outlined overlay-empty-cart__delete"
+                    >clear</span
+                >
+                <h4 class="overlay-empty-cart__content">
+                    Your shopping cart is empty
+                </h4>
+            </div>
         </div>
-    </div>
-    <script type="module" src="./scripts/app.js"></script>
-</body>
+        <script type="module" src="./scripts/app.js"></script>
+    </body>
 </html>
