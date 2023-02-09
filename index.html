@@ -4,32 +4,31 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="./tailwind-course-projects/tailwind.js"></script>
         <title>Front-End Challenges</title>
     </head>
     <body>
-        <h2>Front-End Challenges</h2>
-        <h4><a href="./shopping-cart/index.html">Shopping Cart</a></h4>
-        <p>HTML CSS JS</p>
-
-        <h4><a href="./spa-project/index.html">SPA Project</a></h4>
-        <p>HTML CSS JS</p>
-
-        <h4>
-            <a href="./juice-shopping-store/index.html">Juice Shopping Store</a>
-        </h4>
-        <p>HTML CSS JS</p>
-
-        <h4><a href="./country-guide/index.html">Country Guide App</a></h4>
-        <p>HTML CSS JS</p>
-
-        <h4><a href="./tailwind-sandbox/index.html">Tailwind Sandbox</a></h4>
-        <p>HTML CSS | Tailwind</p>
-
-        <h4>
-            <a href="./tailwind-course-projects/index.html"
-                >Tailwind Course Projects</a
+        <!-- Global Container -->
+        <div
+            class="flex flex-col p-10 item-center justify-center min-h-screen bg-gradient-to-r from-[#1A1C23] via-[#232530] to-[#1A1C23]"
+        >
+            <a
+                href="./index.html"
+                class="flex mx-auto text-[#FAB28E] font-bold text-3xl m-5"
             >
-        </h4>
-        <p>HTML CSS JS | Tailwind</p>
+                Front-End Challenges
+            </a>
+            <!-- Card Container -->
+            <div
+                class="mx-auto p-12 border border-[#27D796] border-4 shadow-2xl rounded-3xl bg-[#2E303E] space-y-10"
+            >
+                <!-- Projects Container -->
+                <div
+                    id="project-container"
+                    class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lx:grid-cols-4"
+                ></div>
+            </div>
+        </div>
+        <script type="module" src="./main.js"></script>
     </body>
 </html>
