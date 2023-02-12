@@ -30,8 +30,13 @@ class Projects {
                 technologies: 'html css js tailwindcss'
             },
             {
-                title: 'Tailwind Course Projects',
-                url: './tailwind-course-projects/index.html',
+                title: 'Tailwind CSS Mini Projects',
+                url: './tailwind-course-projects/mini-projects/index.html',
+                technologies: 'html css js tailwindcss'
+            },
+            {
+                title: 'Tailwind CSS Projects',
+                url: './tailwind-course-projects/website-projects/index.html',
                 technologies: 'html css js tailwindcss'
             }
         ]
@@ -49,7 +54,7 @@ class Projects {
 
     product(url, title, technologies) {
         let projectHTML = `
-        <a href=${url} class="relative group border border-[#E95379] border-4 rounded-3xl">
+        <a href=${url} class="relative group border border-[#E95379] border-8 rounded-3xl">
             <div class="relative bg-white rounded-3xl">
                 <iframe
                     src=${url}
