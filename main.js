@@ -38,6 +38,11 @@ class Projects {
                 title: 'Tailwind CSS Projects',
                 url: './tailwind-course-projects/website-projects/index.html',
                 technologies: 'html css js tailwindcss'
+            },
+            {
+                title: 'JavaScript Simplified/Advanced',
+                url: './javascript-simplified/index.html',
+                technologies: 'html css js'
             }
         ]
     }
