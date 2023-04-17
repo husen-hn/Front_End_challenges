@@ -43,6 +43,11 @@ class Projects {
                 title: 'JavaScript Simplified/Advanced',
                 url: './javascript-simplified/index.html',
                 technologies: 'html css js'
+            },
+            {
+                title: 'React first steps',
+                url: './react-first-steps/index.html',
+                technologies: 'html css js react'
             }
         ]
     }
