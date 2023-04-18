@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
-import { useState } from 'react'
-import NewTodoForm from './NewTodoForm'
+import { useEffect, useState } from 'react'
+import { NewTodoForm } from './NewTodoForm'
 import './styles.css'
-import TodoList from './TodoList'
+import { TodoList } from './TodoList'
 
 export default function App() {
     const [todos, setTodos] = useState(() => {
         const localValue = localStorage.getItem('ITEMS')
         if (localValue == null) return []
+
         return JSON.parse(localValue)
     })
 
@@ -16,10 +16,10 @@ export default function App() {
     }, [todos])
 
     function addTodo(title) {
-        setTodos((currentValue) => {
+        setTodos((currentTodos) => {
             return [
-                ...currentValue,
-                { id: crypto.randomUUID(), title: title, completed: false }
+                ...currentTodos,
+                { id: crypto.randomUUID(), title, completed: false }
             ]
         })
     }
@@ -38,7 +38,7 @@ export default function App() {
 
     function deleteTodo(id) {
         setTodos((currentTodos) => {
-            return currentTodos.fill((todo) => todo.id !== id)
+            return currentTodos.filter((todo) => todo.id !== id)
         })
     }
 
