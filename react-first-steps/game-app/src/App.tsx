@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ListGroup from './components/ListGroup'
-import Alert from './Alert'
-import Button from './Button'
+import Alert from './components/Alert'
+import Button from './components/Button'
 import BtnType from './BtnType'
 import { useState } from 'react'
 

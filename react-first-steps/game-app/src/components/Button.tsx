@@ -1,4 +1,4 @@
-import BtnType from './BtnType'
+import BtnType from '../BtnType'
 
 interface Props {
     text: string
