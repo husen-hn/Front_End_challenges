@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import './App.css'
 import Alert from './components/Alert'
-import BtnType from './components/BtnType'
+import BtnType from './components/Button/BtnType'
 import Button from './components/Button'
 import ListGroup from './components/ListGroup'
+import Like from './components/Like'
 
 function App() {
     const items = ['New York', 'San Francico', 'Tokyo', 'London', 'Paris']
@@ -12,6 +12,14 @@ function App() {
 
     function onClickHandler() {
         setVisible(!visible)
+    }
+
+    const [liked, setLiked] = useState(false)
+
+    function onLikeBtnHandler() {
+        console.log('Clicked')
+
+        setLiked(!liked)
     }
 
     return (
@@ -25,6 +33,7 @@ function App() {
             <Button type={BtnType.DAN} onClick={onClickHandler}>
                 Click here
             </Button>
+            <Like onClick={onLikeBtnHandler} liked={liked} />
         </>
     )
 }
