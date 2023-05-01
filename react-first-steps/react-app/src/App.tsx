@@ -4,6 +4,7 @@ import BtnType from './components/Button/BtnType'
 import Button from './components/Button'
 import ListGroup from './components/ListGroup'
 import Like from './components/Like'
+import ExpandableText from './components/ExpandableText'
 
 function App() {
     const items = ['New York', 'San Francico', 'Tokyo', 'London', 'Paris']
@@ -34,6 +35,13 @@ function App() {
                 Click here
             </Button>
             <Like onClick={onLikeBtnHandler} liked={liked} />
+            <br />
+            <ExpandableText length={10}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Doloremque, deleniti voluptate ducimus sunt molestias beatae
+                minima harum cumque porro quaerat, ad sequi! Sint atque
+                recusandae hic? Dolor harum est iste.
+            </ExpandableText>
         </>
     )
 }
