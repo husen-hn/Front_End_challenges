@@ -5,7 +5,7 @@ interface FormData {
     age: number
 }
 
-function From() {
+function Form() {
     const {
         register,
         handleSubmit,
@@ -57,4 +57,4 @@ function From() {
     )
 }
 
-export default From
+export default Form

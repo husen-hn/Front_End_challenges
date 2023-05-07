@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Alert from './components/Alert'
 import BtnType from './components/Button/BtnType'
 import Button from './components/Button'
@@ -8,7 +8,7 @@ import ExpandableText from './components/ExpandableText'
 import Form from './components/Form'
 import ExpanceFilter from './expense-tracker/components/ExpanceFilter'
 import ExpenceForm from './expense-tracker/components/ExpenceForm'
-import ExpenseList, { Expense } from './expense-tracker/components/ExpenseList'
+import ProductList from './components/ProductList'
 
 function App() {
     const items = ['New York', 'San Francico', 'Tokyo', 'London', 'Paris']
@@ -27,9 +27,13 @@ function App() {
         setLiked(!liked)
     }
 
-    const [selectedCategory, setSelectedCategory] = useState('')
+    const [, setSelectedCategory] = useState('')
 
     const [expenses, setExpenses] = useState([])
+
+    const [category, setCategory] = useState('')
+    // after render
+    useEffect(() => {})
 
     return (
         <>
@@ -69,6 +73,19 @@ function App() {
                         setExpenses(expenses.filter((e) => e.id !== id))
                     }
                 />
+            </div>
+            <div>
+                <select
+                    className="form-select"
+                    onChange={(event) => {
+                        setCategory(event.target.value)
+                    }}
+                >
+                    <option value=""></option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Household">Household</option>
+                </select>
+                <ProductList category={category} />
             </div>
         </>
     )
