@@ -24,7 +24,7 @@ interface FetchGamesResponse {
 const useGames = () => {
     const [games, setGames] = useState<Game[]>([])
     const [error, setError] = useState('')
-    const [isLodaing, setLoading] = useState(false)
+    const [isLoading, setLoading] = useState(false)
 
     setLoading(true)
     useEffect(() => {
@@ -44,7 +44,7 @@ const useGames = () => {
         return () => controller.abort()
     }, [])
 
-    return { games, error, isLodaing }
+    return { games, error, isLoading }
 }
 
 export default useGames
