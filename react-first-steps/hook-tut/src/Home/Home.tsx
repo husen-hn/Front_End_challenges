@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom'
 
-function Posts() {
+function Home() {
     return (
         <div style={{ padding: 20 }}>
-            <h2>Blog</h2>
+            <h2>Home</h2>
             <Outlet />
         </div>
     )
 }
 
-export default Posts
+export default Home

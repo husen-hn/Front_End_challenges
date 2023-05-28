@@ -9,8 +9,8 @@ function App() {
                 <Link to="/" style={{ padding: 5 }}>
                     Home
                 </Link>
-                <Link to="/posts" style={{ padding: 5 }}>
-                    Posts
+                <Link to="/blog" style={{ padding: 5 }}>
+                    Blog
                 </Link>
             </nav>
 

@@ -1,9 +1,8 @@
 import { useParams } from 'react-router-dom'
-import BlogPosts from '../../data/BlogPosts'
+import BlogPosts from '../data/BlogPosts'
 
 function Post() {
     const { slug } = useParams()
-    console.log(slug)
 
     const post = BlogPosts[slug as string]
 
@@ -11,13 +10,13 @@ function Post() {
         return <span>The blog post you've requested doesn't exist.</span>
     }
 
-    const { title, description } = post
+    const { title, text } = post
 
     return (
         <div style={{ padding: 20 }}>
             <h3>{title}</h3>
 
-            <p>{description}</p>
+            <p>{text}</p>
         </div>
     )
 }

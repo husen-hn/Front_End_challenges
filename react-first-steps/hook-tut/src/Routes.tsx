@@ -1,17 +1,26 @@
 import { useRoutes } from 'react-router-dom'
-import Post from './components/Blog/Post'
-import PostLists from './components/Blog/PostLists'
-import Posts from './components/Blog/Posts'
-import NoMatch from './components/NoMatch/NoMatch'
-import UseEffectHook from './components/useEffect/UseEffectHook'
-import UseStateHook from './components/useState/UseStateHook'
+import Post from './Blog/Post'
+import PostLists from './Blog/PostLists'
+import NoMatch from './NoMatch/NoMatch'
+import UseEffectHook from './Hooks/useEffect/UseEffectHook'
+import Blog from './Blog/Blog'
+import Home from './Home/Home'
+import HooksList from './Home/HooksList'
+import Hook from './Home/Hook'
 
 function Routes() {
     const element = useRoutes([
-        { path: '/', element: <UseStateHook /> },
         {
-            path: '/posts',
-            element: <Posts />,
+            path: '/',
+            element: <Home />,
+            children: [
+                { index: true, element: <HooksList /> },
+                { path: ':slug', element: <Hook /> }
+            ]
+        },
+        {
+            path: '/blog',
+            element: <Blog />,
             children: [
                 { index: true, element: <PostLists /> },
                 { path: ':slug', element: <Post /> }
