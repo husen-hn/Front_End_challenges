@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    background: #1C1E26
+}
+
+* {
+    color: #FDF0ED
+}
+
+a {
+    color: #21BFC2;
+    text-decoration-line: underline;
+}

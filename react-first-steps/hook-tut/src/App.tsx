@@ -5,7 +5,7 @@ import Routes from './Routes.tsx'
 function App() {
     return (
         <Router>
-            <nav style={{ margin: 10 }}>
+            <nav className="p-10 bg-[#16161C]">
                 <Link to="/" style={{ padding: 5 }}>
                     Home
                 </Link>
