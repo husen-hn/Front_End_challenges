@@ -26,7 +26,6 @@ function Routes() {
                 { path: ':slug', element: <Post /> }
             ]
         },
-        { path: '/useEffectHook', element: <UseEffectHook /> },
         { path: '*', element: <NoMatch /> }
     ])
     return element
