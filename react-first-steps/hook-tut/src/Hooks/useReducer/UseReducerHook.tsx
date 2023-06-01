@@ -46,7 +46,7 @@ function UseReducerHook() {
         <>
             {todos.map(
                 (todo: { id: number; title: string; complete: boolean }) => (
-                    <div key={todo.id}>
+                    <div key={todo.id} className="flex items-center mb-4">
                         <label>
                             <input
                                 type="checkbox"

@@ -5,6 +5,7 @@ import UseFormHook from '../Hooks/useForm/UseFormHook'
 import UseContextHook from '../Hooks/useContext/UseContextHook'
 import UseRefHook from '../Hooks/useRef/UseRefHook'
 import UseReducerHook from '../Hooks/useReducer/UseReducerHook'
+import UseCallbackHook from '../Hooks/useCallback/UseCallbackHook'
 
 const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-sate': {
@@ -26,6 +27,10 @@ const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-reducer': {
         title: 'useReducer',
         element: <UseReducerHook />
+    },
+    'use-callback': {
+        title: 'useCallback',
+        element: <UseCallbackHook />
     },
     'use-form': {
         title: 'useForm',
