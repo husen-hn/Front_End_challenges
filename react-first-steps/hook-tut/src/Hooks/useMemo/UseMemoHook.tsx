@@ -15,18 +15,38 @@ function UseMemoHook() {
     return (
         <div>
             <div>
-                <h2>My Todos</h2>
+                <h2 className="text-3xl font-bold m-10">My Todos</h2>
                 {todos.map((todo, index) => {
-                    return <p key={index}>{todo}</p>
+                    return (
+                        <p
+                            className="text-xl text-gray-400 font-semibold ml-10 mb-3"
+                            key={index}
+                        >
+                            {todo}
+                        </p>
+                    )
                 })}
-                <button onClick={addTodo}>Add Todo</button>
+                <button
+                    className="shadow bg-[#F09383] hover:bg-[#FAC29A] focus:shadow-outline focus:outline-none text-black font-bold py-2 px-4 m-10 rounded"
+                    onClick={addTodo}
+                >
+                    Add Todo
+                </button>
             </div>
             <hr />
-            <div>
+            <div className="flex flex-row text-xl font-bold m-10">
+                {' '}
+                <h2 className="text-gray-400 mx-1">Expensive Calculation</h2>
+                <h2 className="text-[#F43E5C]">{calculation}</h2>
+            </div>
+            <div className="text-xl font-bold text-[#F09383] ml-10">
                 Count: {count}
-                <button onClick={increment}>+</button>
-                <h2>Expensive Calculation</h2>
-                {calculation}
+                <button
+                    className="p-5 border-double border-2 border-[#09F7A0] rounded-xl m-5 text-[#09F7A0]"
+                    onClick={increment}
+                >
+                    +
+                </button>
             </div>
         </div>
     )
