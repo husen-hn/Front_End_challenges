@@ -8,6 +8,7 @@ import UseReducerHook from '../Hooks/useReducer/UseReducerHook'
 import UseCallbackHook from '../Hooks/useCallback/UseCallbackHook'
 import ErrorBoundaryApp from '../Hooks/error-boundary/ErrorBoundaryApp'
 import ErrorBoundary from '../Hooks/error-boundary/ErrorBoundary'
+import UseMemoHook from '../Hooks/useMemo/UseMemoHook'
 
 const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-sate': {
@@ -33,6 +34,10 @@ const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-callback': {
         title: 'useCallback',
         element: <UseCallbackHook />
+    },
+    'use-memo': {
+        title: 'useMemo',
+        element: <UseMemoHook />
     },
     'use-form': {
         title: 'useForm',
