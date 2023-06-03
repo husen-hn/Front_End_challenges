@@ -9,6 +9,7 @@ import UseCallbackHook from '../Hooks/useCallback/UseCallbackHook'
 import ErrorBoundaryApp from '../Hooks/error-boundary/ErrorBoundaryApp'
 import ErrorBoundary from '../Hooks/error-boundary/ErrorBoundary'
 import UseMemoHook from '../Hooks/useMemo/UseMemoHook'
+import TanstackQuery from '../Hooks/tanstack-query/TanstackQuery'
 
 const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-sate': {
@@ -42,6 +43,10 @@ const HooksName: { [key: string]: { title: string; element: ReactElement } } = {
     'use-form': {
         title: 'useForm',
         element: <UseFormHook />
+    },
+    'tanstack-query': {
+        title: 'Tanstack Query',
+        element: <TanstackQuery />
     },
     'error-boundary': {
         title: 'ErrorBoundary',
