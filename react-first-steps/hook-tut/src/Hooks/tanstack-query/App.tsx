@@ -6,32 +6,36 @@ const App = () => {
     const [newTodoTitle, setNewTodoTitle] = useState('')
     const queryClient = useQueryClient()
 
-    const { data: todos, isLoading } = useQuery<Todo[]>(
-        ['todos'],
-        fetchTodos
-    ) as { data: Todo[]; isLoading: boolean }
+    const {
+        data: todos,
+        isLoading,
+        isError,
+        error
+    } = useQuery<Todo[]>({
+        queryKey: ['todos'],
+        queryFn: fetchTodos
+    }) as { data: Todo[]; isLoading: boolean; isError: boolean; error: Error }
 
     const createTodoMutation = useMutation(createTodo, {
         onSuccess: () => {
-            queryClient.invalidateQueries(['todos'])
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
             setNewTodoTitle('')
         }
     })
 
     const updateTodoMutation = useMutation(
-        ['updateTodo'],
         ({ id, completed }: { id: number; completed: boolean }) =>
             updateTodo(id, completed),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(['todos'])
+                queryClient.invalidateQueries({ queryKey: ['todos'] })
             }
         }
     )
 
     const deleteTodoMutation = useMutation(deleteTodo, {
         onSuccess: () => {
-            queryClient.invalidateQueries(['todos'])
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
         }
     })
 
@@ -69,6 +73,8 @@ const App = () => {
             </form>
             {isLoading ? (
                 <p>Loading...</p>
+            ) : isError ? (
+                <div>{error.message}</div>
             ) : (
                 <ul>
                     {todos.map((todo) => (
