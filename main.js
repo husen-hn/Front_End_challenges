@@ -1,13 +1,11 @@
 class Projects {
     constructor() {
         this.projectContainer = document.querySelector('#project-container')
+        this.pureJSProjectContainer = document.querySelector(
+            '#pure-js-project-container'
+        )
 
         this.projects = [
-            {
-                title: 'Shopping Cart',
-                url: './shopping-cart/index.html',
-                technologies: 'html css js'
-            },
             {
                 title: 'SPA Project',
                 url: './spa-project/index.html',
@@ -50,11 +48,32 @@ class Projects {
                 technologies: 'html css js react'
             }
         ]
+
+        this.pureJSProjects = [
+            {
+                title: 'Shopping Cart',
+                url: './shopping-cart/index.html',
+                technologies: 'html css js'
+            },
+            {
+                title: 'Simple Calculator',
+                url: './simple-calculator/index.html',
+                technologies: 'html css js'
+            }
+        ]
     }
 
     display() {
         this.projects.map((project) => {
             this.projectContainer.innerHTML += this.product(
+                project.url,
+                project.title,
+                project.technologies
+            )
+        })
+
+        this.pureJSProjects.map((project) => {
+            this.pureJSProjectContainer.innerHTML += this.product(
                 project.url,
                 project.title,
                 project.technologies
