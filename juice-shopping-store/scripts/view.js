@@ -331,7 +331,7 @@ export default class View {
                 // Remove if amount of item increase to < 1
                 if (juice.amount - 1 < 1) {
                     juices.splice(index, 1)
-                    if (juices === []) cart.cartInitProcess(product, storage)
+                    if (juices.length === 0) cart.cartInitProcess(product, storage)
                 }
 
                 storage.setCartNewJuices(juices)

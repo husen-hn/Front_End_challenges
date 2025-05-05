@@ -7,17 +7,6 @@ class Projects {
 
         this.projects = [
             {
-                title: 'SPA Project',
-                url: './spa-project/index.html',
-                technologies: 'html css js'
-            },
-            ,
-            {
-                title: 'Juice Shopping Store',
-                url: './juice-shopping-store/index.html',
-                technologies: 'html css js'
-            },
-            {
                 title: 'Country Guide App',
                 url: './country-guide/index.html',
                 technologies: 'html css js'
@@ -51,8 +40,18 @@ class Projects {
 
         this.pureJSProjects = [
             {
+                title: 'Juice Shopping Store',
+                url: './juice-shopping-store/index.html',
+                technologies: 'html css js'
+            },
+            {
                 title: 'Shopping Cart',
                 url: './shopping-cart/index.html',
+                technologies: 'html css js'
+            },
+            {
+                title: 'SPA Project',
+                url: './spa-project/index.html',
                 technologies: 'html css js'
             },
             {
