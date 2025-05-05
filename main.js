@@ -7,11 +7,6 @@ class Projects {
 
         this.projects = [
             {
-                title: 'Country Guide App',
-                url: './country-guide/index.html',
-                technologies: 'html css js'
-            },
-            {
                 title: 'Tailwind Sandbox',
                 url: './tailwind-sandbox/index.html',
                 technologies: 'html css js tailwindcss'
@@ -25,11 +20,6 @@ class Projects {
                 title: 'Tailwind CSS Projects',
                 url: './tailwind-course-projects/website-projects/index.html',
                 technologies: 'html css js tailwindcss'
-            },
-            {
-                title: 'JavaScript Simplified/Advanced',
-                url: './javascript-simplified/index.html',
-                technologies: 'html css js'
             },
             {
                 title: 'React first steps',
@@ -47,6 +37,16 @@ class Projects {
             {
                 title: 'Shopping Cart',
                 url: './shopping-cart/index.html',
+                technologies: 'html css js'
+            },
+            {
+                title: 'Minesweeper',
+                url: './minesweeper/index.html',
+                technologies: 'html css js'
+            },
+            {
+                title: 'Country Guide App',
+                url: './country-guide/index.html',
                 technologies: 'html css js'
             },
             {
