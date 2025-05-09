@@ -30,6 +30,11 @@ class Projects {
 
         this.pureJSProjects = [
             {
+                title: 'Recipe Finder',
+                url: './recipe-finder/index.html',
+                technologies: 'html css js'
+            },
+            {
                 title: 'Juice Shopping Store',
                 url: './juice-shopping-store/index.html',
                 technologies: 'html css js'

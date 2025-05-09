@@ -1,3 +1,8 @@
 {
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "workbench.colorCustomizations": {
+        "statusBar.foreground": "#FAB28E",
+        "minimap.background": "#00000000",
+        "scrollbar.shadow": "#00000000"
+    }
 }
