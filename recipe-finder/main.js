@@ -1,5 +1,6 @@
 const SEARCH_API_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s='
 const RANDOM_API_URL = 'https://www.themealdb.com/api/json/v1/1/random.php'
+const LOOKUP_API_URL = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i='
 
 const searchForm = document.getElementById('search-form')
 const searchInput = document.getElementById('search-input')
@@ -65,6 +66,7 @@ function displayRecipes(recipes) {
     recipes.forEach((recipe) => {
         const recipeDiv = document.createElement('div')
         recipeDiv.classList.add('recipe-item')
+        recipeDiv.dataset.id = recipe.idMeal
 
         recipeDiv.innerHTML = `
         <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" loading="lazy" />
@@ -119,12 +121,29 @@ resultsGrid.addEventListener('click', (e) => {
     const card = e.target.closest('.recipe-item')
 
     if (card) {
-        getRecipeDetails(1232)
+        const recipeId = card.dataset.id
+        getRecipeDetails(recipeId)
     }
 })
 
 async function getRecipeDetails(id) {
+    modalContent.innerHTML = '<p class="message loading">Loading Details...</p>'
     showModal()
+
+    try {
+        const response = await fetch(`${LOOKUP_API_URL}${id}`)
+        if (!response.ok) throw new Error('Failed to fetch recipe details.')
+        const data = await response.json()
+        if (data.meals && data.meals.length > 0) {
+            displayRecipeDetails(data.meals[0])
+        } else {
+            modalContent.innerHTML =
+                '<p class="message error">Could not load recipe details.</p>'
+        }
+    } catch (error) {
+        modalContent.innerHTML =
+            '<p class="message error">Failed to load recipe details. check your connection or try again.</p>'
+    }
 }
 
 modalCloseButton.addEventListener('click', closeModal)
@@ -133,3 +152,52 @@ modal.addEventListener('click', (e) => {
         closeModal()
     }
 })
+
+function displayRecipeDetails(recipe) {
+    const ingredinets = []
+
+    for (let i = 1; i <= 20; i++) {
+        const ingredinet = recipe[`strIngredient${i}`]?.trim()
+        const measure = recipe[`strMeasure${i}`]?.trim()
+
+        if (ingredinet) {
+            ingredinets.push(`<li>${measure ? `${measure}` : ''}</li>`)
+        } else {
+            break
+        }
+    }
+
+    const categoryHTML = recipe.strCategory
+        ? `<h3>Category: ${recipe.strCategory}</h3>`
+        : ''
+
+    const areaHTML = recipe.strArea ? `<h3>Area: ${recipe.strArea}</h3>` : ''
+    const ingredinetsHTML = ingredinets.length
+        ? `<h3>Ingredinets</h3><ul>${ingredinets.join('')}</ul>`
+        : ''
+
+    const instructionsHTML = `<h3>Instructions</h3><p>${
+        recipe.strInstructions
+            ? recipe.strInstructions.replace(/\r?\n/g, '<br>')
+            : 'Instructions not available.'
+    }</p>`
+
+    const youtubeHTML = recipe.strYoutube
+        ? `<h3>Video Recipe</h3><div class="video-wrapper"><a href="${recipe.strYoutube}" target="_blank">Watch on YouTube</a></div>`
+        : ''
+
+    const sourceHTML = recipe.strSource
+        ? `<div class="source-wrapper"><a href="${recipe.strSource}" target="_blank">View Original Source</a></div>`
+        : ''
+
+    modalContent.innerHTML = `
+        <h2>${recipe.strMeal}</h2>
+        <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}">
+        ${categoryHTML}
+        ${ingredinetsHTML}
+        areaHTML}
+        ${instructionsHTML}
+        ${youtubeHTML}
+        ${sourceHTML}
+        `
+}
